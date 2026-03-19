@@ -1,0 +1,85 @@
+# Default values for platform bootstrap.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# defaults
+default_settings: &git_defaults
+  repoURL: https://github.com/rhpds/ci-template-gitops.git
+  targetRevision: main
+
+deployer:
+  domain: cluster.example.com
+
+# Example 1 — Platform shared resource: GitLab instance shared across all tenants
+platformExampleSharedGitlab:
+  enabled: false
+  git:
+    path: cluster/platform/platform-example-shared-gitlab
+    <<: *git_defaults
+
+OAuthAccountOperator:
+  enabled: false
+  authn: htpasswd
+  git:
+    path: helm
+    <<: *git_defaults
+  config:
+    type: HTPasswd
+    htpasswd:
+      htpasswdSecret:
+        name: htpasswd
+
+### These workloads are in the reference workloads library.
+descheduler:
+  enabled: false
+  git:
+    path: reference_workloads_library/platform/descheduler
+    <<: *git_defaults
+
+gitlab:
+  enabled: false
+  git:
+    path: reference_workloads_library/platform/gitlab
+    <<: *git_defaults
+
+kubevirt:
+  enabled: false
+  git:
+    path: reference_workloads_library/platform/kubevirt
+    <<: *git_defaults
+
+mtc:
+  enabled: false
+  git:
+    path: reference_workloads_library/platform/mtc
+    <<: *git_defaults
+
+mtv:
+  enabled: false
+  git:
+    path: reference_workloads_library/platform/mtv
+    <<: *git_defaults
+
+nodeHealthCheck:
+  enabled: false
+  git:
+    path: reference_workloads_library/platform/node-health-check
+    <<: *git_defaults
+
+odf:
+  enabled: false
+  git:
+    path: reference_workloads_library/platform/odf
+    <<: *git_defaults
+
+rhoai:
+  enabled: false
+  git:
+    path: reference_workloads_library/platform/rhoai
+    <<: *git_defaults
+
+webterminal:
+  enabled: false
+  git:
+    path: reference_workloads_library/platform/webterminal
+    <<: *git_defaults
