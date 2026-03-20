@@ -5,7 +5,7 @@ metadata:
   name: openshift-cnv-og
   namespace: openshift-cnv
   annotations:
-    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-wave: "-5"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   targetNamespaces:

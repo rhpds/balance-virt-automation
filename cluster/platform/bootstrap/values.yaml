@@ -26,7 +26,7 @@
 # Git defaults — applied to every workload via YAML anchors (&git_defaults).
 # ---------------------------------------------------------------------------
 default_settings: &git_defaults
-  repoURL: https://github.com/rhpds/ci-template-gitops.git
+  repoURL: https://github.com/rhpds/balance-virt-automation.git
   targetRevision: main
 
 # ---------------------------------------------------------------------------
@@ -95,7 +95,7 @@ gitlab:
 # KubeVirt (OpenShift Virtualization) — creates HyperConverged CR and StorageClass.
 # Infra pair: kubevirtOperator (in infra values)
 kubevirt:
-  enabled: false
+  enabled: true
   git:
     path: workloads_library/platform/kubevirt
     <<: *git_defaults

@@ -28,7 +28,7 @@
 # Override targetRevision per-example in the catalog when developing on a branch.
 # ---------------------------------------------------------------------------
 default_settings: &git_defaults
-  repoURL: https://github.com/rhpds/ci-template-gitops.git
+  repoURL: https://github.com/rhpds/balance-virt-automation.git
   targetRevision: main
 
 # ---------------------------------------------------------------------------
@@ -67,7 +67,7 @@ tenant:
 # ---------------------------------------------------------------------------
 example2HelmBasic:
   enabled: false
-  namespace: example2-USERNAME   # MUST be overridden in catalog
+  namespace: example2-USERNAME # MUST be overridden in catalog
   git:
     path: tenant/example2-helm-basic
     <<: *git_defaults
@@ -83,7 +83,7 @@ example2HelmBasic:
 # ---------------------------------------------------------------------------
 example1InlineResource:
   enabled: false
-  namespace: example1-USERNAME   # MUST be overridden in catalog
+  namespace: example1-USERNAME # MUST be overridden in catalog
 
 # ---------------------------------------------------------------------------
 # labs.example3HelmParameterized — parameterized Helm sub-chart example.

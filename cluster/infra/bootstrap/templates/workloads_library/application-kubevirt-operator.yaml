@@ -10,15 +10,31 @@ spec:
     repoURL: {{ .Values.kubevirtOperator.git.repoURL }}
     targetRevision: {{ .Values.kubevirtOperator.git.targetRevision }}
     path: {{ .Values.kubevirtOperator.git.path }}
+    helm:
+      values: |
+        namespace: openshift-operators
+        operator:
+          startingCSV: kubevirt-hyperconverged-operator.v4.21.0
+          installPlanApproval: Manual
+        helper-status-checker:
+          enabled: true
+          approver: true
+          checks:
+            - operatorName: kubevirt-hyperconverged
+              namespace:
+                name: openshift-cnv
+              syncwave: '-5'
+              serviceAccount:
+                name: "kubevirt-status-checker"
   destination:
     server: https://kubernetes.default.svc
+    namespace: openshift-cnv
   syncPolicy:
     automated:
       enabled: true
     syncOptions:
       - CreateNamespace=true
       - SkipDryRunOnMissingResource=true
-      - RespectIgnoreDifferences=true
     retry:
       limit: 10
       backoff:

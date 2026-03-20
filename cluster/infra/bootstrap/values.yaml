@@ -28,7 +28,7 @@
 # Override repoURL or targetRevision per-workload only if pointing somewhere else.
 # ---------------------------------------------------------------------------
 default_settings: &git_defaults
-  repoURL: https://github.com/rhpds/ci-template-gitops.git
+  repoURL: https://github.com/rhpds/balance-virt-automation.git
   targetRevision: main
 
 # ---------------------------------------------------------------------------
@@ -60,6 +60,15 @@ defaultStorageclass:
   git:
     path: cluster/infra/default-storageclass
     <<: *git_defaults
+
+# ---------------------------------------------------------------------------
+# To enable Subscription (Operator) version pinning, you need special ArgoCD health checks
+# set argocd.heealthchecks.enabled: true
+# Enabled by default.
+# ---------------------------------------------------------------------------
+argocd:
+  resourceHealthChecks:
+    enabled: true
 
 # ---------------------------------------------------------------------------
 # platformValues — passed through verbatim to the platform bootstrap chart.
@@ -105,7 +114,7 @@ keycloakResources:
 # Descheduler Operator — evicts pods to rebalance nodes.
 # Platform pair: descheduler (in platform values)
 deschedulerOperator:
-  enabled: true
+  enabled: false
   git:
     path: workloads_library/infra/descheduler-operator
     <<: *git_defaults
@@ -117,6 +126,8 @@ kubevirtOperator:
   git:
     path: workloads_library/infra/kubevirt-operator
     <<: *git_defaults
+  operator:
+    startingCSV: kubevirt-operator.v4.21.0
 
 # Migration Toolkit for Containers Operator.
 # Platform pair: mtc (in platform values)
@@ -137,7 +148,7 @@ mtvOperator:
 # Node Health Check Operator.
 # Platform pair: nodeHealthCheck (in platform values)
 nodeHealthCheckOperator:
-  enabled: true
+  enabled: false
   git:
     path: workloads_library/infra/node-health-check-operator
     <<: *git_defaults

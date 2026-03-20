@@ -1,4 +1,16 @@
 operator:
-  channel: candidate
-  startingCSV: kubevirt-hyperconverged-operator.v4.20.3
+  channel: stable
+  startingCSV: kubevirt-hyperconverged-operator.v4.21.0
   installPlanApproval: Manual
+
+# Using sub-chart helper-status-checker
+helper-status-checker:
+  enabled: true
+  approver: false
+  checks:
+    - operatorName: kubevirt-hyperconverged
+      namespace:
+        name: openshift-cnv
+      syncwave: "-5"
+      serviceAccount:
+        name: "kubevirt-status-checker"
