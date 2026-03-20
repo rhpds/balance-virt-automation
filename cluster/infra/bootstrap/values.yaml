@@ -105,7 +105,7 @@ keycloakResources:
 # Descheduler Operator — evicts pods to rebalance nodes.
 # Platform pair: descheduler (in platform values)
 deschedulerOperator:
-  enabled: false
+  enabled: true
   git:
     path: workloads_library/infra/descheduler-operator
     <<: *git_defaults
@@ -113,7 +113,7 @@ deschedulerOperator:
 # KubeVirt (OpenShift Virtualization) Operator — runs VMs on OpenShift.
 # Platform pair: kubevirt (in platform values)
 kubevirtOperator:
-  enabled: false
+  enabled: true
   git:
     path: workloads_library/infra/kubevirt-operator
     <<: *git_defaults
@@ -137,7 +137,7 @@ mtvOperator:
 # Node Health Check Operator.
 # Platform pair: nodeHealthCheck (in platform values)
 nodeHealthCheckOperator:
-  enabled: false
+  enabled: true
   git:
     path: workloads_library/infra/node-health-check-operator
     <<: *git_defaults
@@ -157,3 +157,4 @@ selfNodeRemediationOperator:
   git:
     path: workloads_library/infra/self-node-remediation-operator
     <<: *git_defaults
+
