@@ -10,8 +10,25 @@ spec:
     repoURL: {{ .Values.deschedulerOperator.git.repoURL }}
     targetRevision: {{ .Values.deschedulerOperator.git.targetRevision }}
     path: {{ .Values.deschedulerOperator.git.path }}
+    helm:
+      values: |
+        namespace: openshift-operators
+        operator:
+          startingCSV: {{ .Values.deschedulerOperator.operator.startingCSV }}
+          installPlanApproval: Manual
+        helper-status-checker:
+          enabled: true
+          approver: true
+          checks:
+            - operatorName: cluster-kube-descheduler-operator
+              namespace:
+                name: openshift-kube-descheduler-operator
+              syncwave: '0'
+              serviceAccount:
+                name: "descheduler-status-checker"
   destination:
     server: https://kubernetes.default.svc
+    namespace: openshift-kube-descheduler-operator
   syncPolicy:
     automated:
       enabled: true

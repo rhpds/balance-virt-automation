@@ -79,7 +79,7 @@ OAuthAccountOperator:
 # Descheduler — creates the Descheduler CR and MachineConfig after the operator installs.
 # Infra pair: deschedulerOperator (in infra values)
 descheduler:
-  enabled: false
+  enabled: true
   git:
     path: workloads_library/platform/descheduler
     <<: *git_defaults
