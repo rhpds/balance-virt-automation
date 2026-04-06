@@ -1,0 +1,51 @@
+{{- $app := index .Values.applications "node_taint" }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pvc-delete-job
+  namespace: {{ $app.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pvc-delete-job
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: pvc-delete-job
+  namespace: {{ $app.namespace }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pvc-delete-job
+  namespace: {{ $app.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      serviceAccountName: pvc-delete-job
+      containers:
+      - name: pvc-delete
+        image: image-registry.openshift-image-registry.svc:5000/openshift/cli
+        command:
+        - /bin/sh
+        - -c
+        - |
+          echo "######################"
+          echo "# delete pvc in namespace default to clean restart the datavolumes import"
+          echo "######################"
+          oc delete pvc --all -n default

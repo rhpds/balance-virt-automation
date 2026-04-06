@@ -1,0 +1,85 @@
+== Plan for Tenant-Node Strong Relationship and Isolation
+
+=== The Problem
+
+We need each user to have four dedicated nodes.  They can do whatever they need to those nodes, but we need to prevent other users from using them.
+
+The nodes need to be cleaned up from the changes when a user is deleted.
+
+I'll need Delete hook that cleans up the mess.  Good luck, Judd
+
+=== The Solution - Maybe
+
+In OpenShift, while node labels and selectors are the foundational mechanism for pod placement, they are rarely used in isolation for true multi-tenant management. Relying solely on them is risky because users can simply "untick" or change the selector in their Deployment YAML to land on someone else's nodes.
+
+To truly isolate users and allow them to "manage" specific nodes, you need a combination of *Admission Controllers*, *Taints/Tolerations*, and *RBAC*.
+
+=== 1. Hard Isolation: Taints and Tolerations
+
+If you want to ensure that _only_ specific users' workloads can land on certain nodes, you must use *Taints*.
+
+* *The Taint:* You "repel" all pods from a node by adding a taint (e.g., `dedicated=userA:NoSchedule`).
+* *The Toleration:* Only pods that have a matching "toleration" in their configuration can be scheduled there.
+
+=== 2. Automation: Namespace-on-Node Isolation
+
+Instead of asking users to manually add selectors or tolerations (which they can forget or bypass), you should automate this at the *Namespace (Project)* level. This is the standard "OpenShift way" for multi-tenancy.
+
+* *Namespace Node Selector:* You can annotate a namespace so that every pod created within it automatically gets a specific `nodeSelector` added to it.
++
+[source,bash]
+----
+oc annotate namespace <name> openshift.io/node-selector="purpose=user-a-nodes"
+----
+
+* *PodNodeConstraints Admission Plugin:* This is a powerful, often overlooked tool. It allows you to set a "blacklist" or "whitelist" of node labels for specific users/projects, preventing them from even _trying_ to schedule elsewhere.
+
+=== 3. "Managing" the Nodes: Scoped RBAC
+
+The trickiest part of your request is "managing those nodes." In Kubernetes/OpenShift, *Nodes are cluster-scoped resources*, not namespace-scoped.
+
+By default, if you give a user `edit` or `admin` rights to a project, they *cannot* see or manage the underlying nodes. To allow them to manage "their" nodes without giving them cluster-admin rights, you have two options:
+
+[cols="1,2,2", options="header"]
+|===
+| Method | How it Works | Pros/Cons
+
+| *Custom ClusterRole*
+| Create a `ClusterRole` with `verbs: ["get", "patch"]` limited to specific `resourceNames` (the node names).
+| *Pro:* Very granular. *Con:* High manual overhead; you must update the role every time a node is replaced.
+
+| *MachineSet Access*
+| If using a cloud provider (AWS, Azure, GCP), give the user permissions to manage the *MachineSet* instead of the Node object.
+| *Pro:* Clean integration with scaling. *Con:* User can still technically see other infrastructure.
+|===
+
+=== 4. Comparison of Methods
+
+[cols="1,1,1,1", options="header"]
+|===
+| Feature | Node Selectors | Taints & Tolerations | Namespace Isolation
+
+| *Primary Goal*
+| Directs pods _to_ a node.
+| Keeps pods _off_ a node.
+| Automates placement.
+
+| *Security*
+| Weak (User can change it).
+| Strong (Node rejects pods).
+| Medium (Enforced by Admin).
+
+| *Complexity*
+| Low.
+| Moderate.
+| Best for Multi-tenant.
+|===
+
+=== Summary Recommendation
+
+To achieve your goal:
+
+. *Label* the nodes for each user.
+. *Taint* those nodes so no one else can use them.
+. *Annotate the User's Project* with a `node-selector` and a matching `toleration` so their pods are automatically routed and accepted by their specific nodes.
+. *Create a Custom ClusterRole* and bind it to the user so they can `list` and `get` only the nodes assigned to them.

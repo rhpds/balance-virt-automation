@@ -1,0 +1,70 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: node-master-taint-job
+  namespace: default
+  annotations:
+    argocd.argoproj.io/sync-wave: "-20"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: node-master-taint-job
+  annotations:
+    argocd.argoproj.io/sync-wave: "-20"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: node-master-taint-job
+  namespace: default
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: node-master-taint-job
+  namespace: default
+  annotations:
+    argocd.argoproj.io/sync-wave: "-20"
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      serviceAccountName: node-master-taint-job
+      containers:
+      - name: node-master-taint-patch
+        image: image-registry.openshift-image-registry.svc:5000/openshift/cli
+        command:
+        - /bin/sh
+        - -c
+        - |
+          echo "######################"
+          echo "# taint the master node"
+          echo "######################"
+          oc adm taint node -l node-role.kubernetes.io/master key=virtualization:NoSchedule
+
+          echo "######################"
+          echo "# fix ceph-operator-config configmap, should fix noobaa"
+          echo "######################"
+          # If I delete first sometimes there's race conditions.
+          # oc delete configmap rook-ceph-operator-config -n openshift-storage
+          echo "oc apply to fix ceph-operator-config configmap"
+          cat <<EOF | oc apply -f -
+          kind: ConfigMap
+          apiVersion: v1
+          metadata:
+            name: rook-ceph-operator-config
+            namespace: openshift-storage
+          data:
+            CSI_PLUGIN_TOLERATIONS: |-
+              - key: key
+                operator: Equal
+                value: "virtualization"
+                effect: NoSchedule
+          EOF
+          # delete rook operator pods to bump the movement of the infranodes.
+          # but will have to find the name of the rook operator pod
+          oc delete -n openshift-storage pod -l app=rook-ceph-operator

@@ -1,0 +1,47 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: descheduler
+  namespace: openshift-gitops
+  labels:
+    demo.redhat.com/application: ""
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/rhpds/ocp-virt-admin-rosetta-gitops.git
+    targetRevision: {{ .Values.targetRevision }}
+    path: "infra/descheduler"
+    # helm:
+    #   values: |
+    #     user:
+    #       count: {{ .Values.user.count }}
+    #       base: {{ .Values.user.base }}
+    #     deployer:
+    #       domain: {{ .Values.deployer.domain }}
+    #       apiUrl: {{ .Values.deployer.apiUrl }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openshift-kube-descheduler-operator
+  syncPolicy:
+    automated:
+      enabled: {{ .Values.syncPolicy.automated.enabled }}
+    syncOptions:
+      - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
+      - RespectIgnoreDifferences=true
+    managedNamespaceMetadata:
+      labels:
+        openshift.io/cluster-monitoring: "true"
+    retry:
+      limit: 10         # Max number of retry attempts
+      backoff:
+        duration: 5s    # Initial wait time
+        factor: 2       # Multiply wait time by this factor each fail (5s, 10s, 20s...)
+        maxDuration: 3m # Cap the wait time at 3 minutes
+  ignoreDifferences:
+    - group: "operator.openshift.io"
+      kind: "KubeDescheduler"
+      jsonPointers:
+        - /spec/mode
+        - /spec/deschedulingIntervalSeconds

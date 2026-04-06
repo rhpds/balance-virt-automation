@@ -1,0 +1,51 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: scheduler-patch-job
+  namespace: default
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: scheduler-patch-job
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: scheduler-patch-job
+  namespace: default
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: scheduler-patch-job
+  namespace: default
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      serviceAccountName: scheduler-patch-job
+      containers:
+      - name: scheduler-patch-job
+        image: image-registry.openshift-image-registry.svc:5000/openshift/cli
+        command:
+        - /bin/sh
+        - -c
+        - |
+          echo "######################"
+          echo "# Patch the scheduler cluster to set mastersSchedulable to false"
+          echo "######################"
+
+          oc patch scheduler cluster --type merge -p '{"spec":{"mastersSchedulable":false}}'

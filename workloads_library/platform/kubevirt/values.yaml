@@ -1,6 +1,0 @@
-ocp4_workload_openshift_virtualization_workload_tolerations: []
-external_ceph: true
-
-guid: xyzzy
-
-createStorageClass: false

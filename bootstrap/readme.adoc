@@ -1,0 +1,5 @@
+Use this to deploy all /infra/templates and all /user/templates for N number of users.
+
+In /bootstrap/templates, infratructure resource requriements should be computed for /infra/templates by the number of users.
+
+In /infra/templates, a fixed number of max users will determine resource settings in /infra/values.yaml

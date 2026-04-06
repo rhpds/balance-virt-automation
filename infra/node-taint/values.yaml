@@ -1,0 +1,7 @@
+# Default values for nodes.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+applications:
+  node_taint:
+    namespace: default
