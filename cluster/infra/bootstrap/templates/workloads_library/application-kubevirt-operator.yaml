@@ -12,6 +12,7 @@ spec:
     path: {{ .Values.kubevirtOperator.git.path }}
   destination:
     server: https://kubernetes.default.svc
+    namespace: openshift-cnv
   syncPolicy:
     automated:
       enabled: true
