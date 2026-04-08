@@ -12,6 +12,7 @@ spec:
     path: {{ .Values.deschedulerOperator.git.path }}
   destination:
     server: https://kubernetes.default.svc
+    namespace: openshift-kube-descheduler-operator
   syncPolicy:
     automated:
       enabled: true
