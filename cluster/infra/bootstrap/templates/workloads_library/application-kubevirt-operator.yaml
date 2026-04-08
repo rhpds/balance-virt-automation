@@ -10,6 +10,18 @@ spec:
     repoURL: {{ .Values.kubevirtOperator.git.repoURL }}
     targetRevision: {{ .Values.kubevirtOperator.git.targetRevision }}
     path: {{ .Values.kubevirtOperator.git.path }}
+    helm:
+      values: |
+        helper-status-checker:
+          approver: true
+          checks:
+            - operatorName: kubevirt-operator
+              namespace:
+                name: 3scale
+              syncwave: '1'
+              serviceAccount:
+                name: "kubevirt-status-checker"
+
   destination:
     server: https://kubernetes.default.svc
     namespace: openshift-cnv
