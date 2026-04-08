@@ -28,7 +28,7 @@
 # Override repoURL or targetRevision per-workload only if pointing somewhere else.
 # ---------------------------------------------------------------------------
 default_settings: &git_defaults
-  repoURL: https://github.com/rhpds/ci-template-gitops.git
+  repoURL: https://github.com/rhpds/balance-virt-automation.git
   targetRevision: main
 
 # ---------------------------------------------------------------------------
@@ -56,7 +56,7 @@ platform:
 # Enabled by default. Disable only if you are managing StorageClass separately.
 # ---------------------------------------------------------------------------
 defaultStorageclass:
-  enabled: true
+  enabled: false
   git:
     path: cluster/infra/default-storageclass
     <<: *git_defaults
@@ -75,23 +75,6 @@ defaultStorageclass:
 # ---------------------------------------------------------------------------
 platformValues: {}
 
-# ---------------------------------------------------------------------------
-# Keycloak automation — opt-in, not needed for most labs.
-# These exist for environments that provision Keycloak via GitOps rather than
-# via the Ansible ocp4_workload_authentication_* roles.
-# ---------------------------------------------------------------------------
-keycloakInfra:
-  enabled: false
-  git:
-    path: cluster/infra/keycloak/keycloak-infra
-    <<: *git_defaults
-
-keycloakResources:
-  enabled: false
-  git:
-    path: cluster/infra/keycloak/keycloak-resources
-    <<: *git_defaults
-
 # ===========================================================================
 # WORKLOADS LIBRARY
 # Pre-built, tested Helm charts for common operators. All disabled by default.
@@ -105,7 +88,7 @@ keycloakResources:
 # Descheduler Operator — evicts pods to rebalance nodes.
 # Platform pair: descheduler (in platform values)
 deschedulerOperator:
-  enabled: false
+  enabled: true
   git:
     path: workloads_library/infra/descheduler-operator
     <<: *git_defaults
@@ -113,23 +96,15 @@ deschedulerOperator:
 # KubeVirt (OpenShift Virtualization) Operator — runs VMs on OpenShift.
 # Platform pair: kubevirt (in platform values)
 kubevirtOperator:
-  enabled: false
+  enabled: true
   git:
     path: workloads_library/infra/kubevirt-operator
-    <<: *git_defaults
-
-# Migration Toolkit for Containers Operator.
-# Platform pair: mtc (in platform values)
-mtcOperator:
-  enabled: false
-  git:
-    path: workloads_library/infra/mtc-operator
     <<: *git_defaults
 
 # Migration Toolkit for Virtualization Operator.
 # Platform pair: mtv (in platform values)
 mtvOperator:
-  enabled: false
+  enabled: true
   git:
     path: workloads_library/infra/mtv-operator
     <<: *git_defaults
@@ -140,14 +115,6 @@ nodeHealthCheckOperator:
   enabled: false
   git:
     path: workloads_library/infra/node-health-check-operator
-    <<: *git_defaults
-
-# Red Hat OpenShift AI Operator.
-# Platform pair: rhoai (in platform values)
-rhoaiOperator:
-  enabled: false
-  git:
-    path: workloads_library/infra/rhoai-operator
     <<: *git_defaults
 
 # Self Node Remediation Operator.
