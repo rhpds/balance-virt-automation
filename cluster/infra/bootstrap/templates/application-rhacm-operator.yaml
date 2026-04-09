@@ -18,11 +18,12 @@ spec:
           apiUrl: {{ .Values.deployer.apiUrl }}
   destination:
     server: https://kubernetes.default.svc
-  destination:
-    server: https://kubernetes.default.svc
     namespace: open-cluster-management
   syncPolicy:
-    automated: {}
+    automated:
+      enabled: true
     syncOptions:
-    - CreateNamespace=true
+      - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
+      - RespectIgnoreDifferences=true
 {{- end }}
