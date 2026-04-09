@@ -17,7 +17,7 @@ spec:
           checks:
             - operatorName: kubevirt-operator
               namespace:
-                name: 3scale
+                name: openshift-cnv
               syncwave: '1'
               serviceAccount:
                 name: "kubevirt-status-checker"
