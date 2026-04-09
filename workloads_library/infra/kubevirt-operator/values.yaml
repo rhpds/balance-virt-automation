@@ -1,4 +1,4 @@
 operator:
-  channel: candidate
+  channel: stable
   startingCSV: kubevirt-hyperconverged-operator.v4.21.1
   installPlanApproval: Manual
