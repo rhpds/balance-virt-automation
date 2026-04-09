@@ -1,0 +1,26 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rhacm-config
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: {{ .Values.rhacmOperator.git.repoURL }}
+    targetRevision: {{ .Values.rhacmOperator.git.targetRevision }}
+    path: {{ .Values.rhacmOperator.git.path }}
+    helm:
+      values: |
+        deployer:
+          domain: {{ .Values.deployer.domain }}
+          apiUrl: {{ .Values.deployer.apiUrl }}
+  destination:
+    server: https://kubernetes.default.svc
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: open-cluster-management
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true

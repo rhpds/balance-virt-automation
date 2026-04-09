@@ -85,6 +85,14 @@ platformValues: {}
 # See each workload's README in workloads_library/infra/<name>/ for details.
 # ===========================================================================
 
+# rhacm Operator — evicts pods to rebalance nodes.
+# Platform pair: rhacm (in platform values)
+rhacmOperator:
+  enabled: true
+  git:
+    path: workloads_library/infra/rhacm-operator
+    <<: *git_defaults
+
 # Descheduler Operator — evicts pods to rebalance nodes.
 # Platform pair: descheduler (in platform values)
 deschedulerOperator:
