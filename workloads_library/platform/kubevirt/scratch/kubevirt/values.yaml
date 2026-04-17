@@ -1,0 +1,21 @@
+# Default values for kubevirt
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deployer:
+  domain: REPLACEME-OPENSHIFT_DOMAIN
+  apiUrl: https://api.cluster.opentlc.com:6443
+
+ingressgatway_url_path: https://localhost
+
+ocp4_workload_openshift_virtualization_workload_tolerations: []
+external_ceph: true # use a boolean, not a "string"
+
+guid: xyzzy
+
+kubevirt:
+  startingCSV: ""
+  # config:
+  #   env:
+  #   - name: KVM_EMULATION
+  #     value: "true"
