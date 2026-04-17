@@ -6,5 +6,5 @@ metadata:
   namespace: openshift-workload-availability
 spec:
   upgradeStrategy: Default
-  targetNamespaces:
-    - openshift-workload-availability
+  # targetNamespaces:
+  #   - openshift-workload-availability
