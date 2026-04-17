@@ -11,6 +11,8 @@ spec:
     - '*'
   destinations:
     - namespace: '*'
+      server: '*'
+    - namespace: '*'
       server: https://kubernetes.default.svc
   clusterResourceWhitelist:
     - group: '*'
