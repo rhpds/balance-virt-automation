@@ -48,9 +48,15 @@ infra:
 keycloakInfra:
   enabled: true
   git:
-    path: /workloads_library/infra/keycloak-charts/keycloak-infra
+    path: workloads_library/infra/keycloak-charts/keycloak-infra
     <<: *git_defaults
- 
+
+keycloakResources:
+  enabled: false
+  git:
+    path: workloads_library/infra/keycloak-charts/keycloak-resources
+    <<: *git_defaults
+
 # ---------------------------------------------------------------------------
 # platform — spawns the platform bootstrap layer. Always keep enabled: true.
 # The platform bootstrap chart lives at cluster/platform/bootstrap/ and follows
