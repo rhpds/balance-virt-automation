@@ -12,6 +12,7 @@ spec:
     path: {{ .Values.nodeHealthCheckOperator.git.path }}
   destination:
     server: https://kubernetes.default.svc
+    namespace: openshift-workload-availability
   syncPolicy:
     automated:
       enabled: true

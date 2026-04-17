@@ -120,7 +120,7 @@ mtvOperator:
 # Node Health Check Operator.
 # Platform pair: nodeHealthCheck (in platform values)
 nodeHealthCheckOperator:
-  enabled: false
+  enabled: true
   git:
     path: workloads_library/infra/node-health-check-operator
     <<: *git_defaults
@@ -128,7 +128,7 @@ nodeHealthCheckOperator:
 # Self Node Remediation Operator.
 # No separate platform-layer workload; the operator self-configures.
 selfNodeRemediationOperator:
-  enabled: false
+  enabled: true
   git:
     path: workloads_library/infra/self-node-remediation-operator
     <<: *git_defaults
