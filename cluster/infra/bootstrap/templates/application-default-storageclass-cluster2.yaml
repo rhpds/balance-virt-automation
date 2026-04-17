@@ -12,7 +12,6 @@ spec:
     path: {{ .Values.defaultStorageclass.git.path }}
   destination:
     name: sno1
-    namespace: openshift-gitops
   syncPolicy:
     automated:
       enabled: true
