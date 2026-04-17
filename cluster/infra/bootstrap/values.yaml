@@ -61,7 +61,7 @@ platform:
 # Enabled by default. Disable only if you are managing StorageClass separately.
 # ---------------------------------------------------------------------------
 defaultStorageclass:
-  enabled: false
+  enabled: true
   git:
     path: cluster/infra/default-storageclass
     <<: *git_defaults
