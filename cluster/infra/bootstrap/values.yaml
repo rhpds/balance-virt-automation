@@ -40,6 +40,11 @@ deployer:
   domain: apps.cluster-guid.sandbox.opentlc.com
   apiUrl: https://api.cluster-guid.sandbox.opentlc.com:6443
 
+infra:
+  enabled: true
+  argoSubscriptionHealthcheck:
+    enabled: false
+
 # ---------------------------------------------------------------------------
 # platform — spawns the platform bootstrap layer. Always keep enabled: true.
 # The platform bootstrap chart lives at cluster/platform/bootstrap/ and follows
