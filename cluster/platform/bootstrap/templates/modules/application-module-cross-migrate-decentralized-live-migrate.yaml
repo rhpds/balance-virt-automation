@@ -1,3 +1,4 @@
+{{- if .Values.moduleDecentralizedLiveMigrate.enabled }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -9,17 +10,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/rhpds/ocp-virt-admin-rosetta-gitops.git
-    targetRevision: {{ .Values.targetRevision }}
-    path: "user/module-cross-migrate/module-decentralized-live-migrate"
-    # helm:
-    #   values: |
-    #     user:
-    #       count: {{ .Values.user.count }}
-    #       base: {{ .Values.user.base }}
-    #     deployer:
-    #       domain: {{ .Values.deployer.domain }}
-    #       apiUrl: {{ .Values.deployer.apiUrl }}
+    repoURL: {{ .Values.moduleDecentralizedLiveMigrate.git.repoURL }}
+    targetRevision: {{ .Values.moduleDecentralizedLiveMigrate.git.targetRevision }}
+    path: {{ .Values.moduleDecentralizedLiveMigrate.git.path }}
   destination:
     server: https://kubernetes.default.svc
     namespace: vm-live-migration-source
@@ -33,3 +26,4 @@ spec:
     managedNamespaceMetadata:
       labels:
         openshift.io/cluster-monitoring: "true"
+{{- end }}

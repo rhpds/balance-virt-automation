@@ -1,25 +1,18 @@
+{{- if .Values.moduleBasicsLiveMigrate.enabled }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: module-live-migrate
+  name: module-basics-live-migrate
   namespace: openshift-gitops
   labels:
     demo.redhat.com/application: ""
 spec:
   project: default
   source:
-    repoURL: https://github.com/rhpds/ocp-virt-admin-rosetta-gitops.git
-    targetRevision: {{ .Values.targetRevision }}
-    path: "user/module-basics/module-live-migrate"
-    # helm:
-    #   values: |
-    #     user:
-    #       count: {{ .Values.user.count }}
-    #       base: {{ .Values.user.base }}
-    #     deployer:
-    #       domain: {{ .Values.deployer.domain }}
-    #       apiUrl: {{ .Values.deployer.apiUrl }}
+    repoURL: {{ .Values.moduleBasicsLiveMigrate.git.repoURL }}
+    targetRevision: {{ .Values.moduleBasicsLiveMigrate.git.targetRevision }}
+    path: {{ .Values.moduleBasicsLiveMigrate.git.path }}
   destination:
     server: https://kubernetes.default.svc
     namespace: live-migrate
@@ -34,3 +27,4 @@ spec:
     managedNamespaceMetadata:
       labels:
         openshift.io/cluster-monitoring: "true"
+{{- end }}

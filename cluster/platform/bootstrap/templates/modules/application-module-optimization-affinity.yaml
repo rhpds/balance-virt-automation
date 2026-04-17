@@ -1,25 +1,18 @@
+{{- if .Values.moduleOptimizationAffinity.enabled }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: module-affinity
+  name: module-optimization-affinity
   namespace: openshift-gitops
   labels:
     demo.redhat.com/application: ""
 spec:
   project: default
   source:
-    repoURL: https://github.com/rhpds/ocp-virt-admin-rosetta-gitops.git
-    targetRevision: {{ .Values.targetRevision }}
-    path: "user/module-optimization/module-affinity"
-    # helm:
-    #   values: |
-    #     user:
-    #       count: {{ .Values.user.count }}
-    #       base: {{ .Values.user.base }}
-    #     deployer:
-    #       domain: {{ .Values.deployer.domain }}
-    #       apiUrl: {{ .Values.deployer.apiUrl }}
+    repoURL: {{ .Values.moduleOptimizationAffinity.git.repoURL }}
+    targetRevision: {{ .Values.moduleOptimizationAffinity.git.targetRevision }}
+    path: {{ .Values.moduleOptimizationAffinity.git.path }}
   destination:
     server: https://kubernetes.default.svc
     namespace: affinity
@@ -34,3 +27,4 @@ spec:
     managedNamespaceMetadata:
       labels:
         openshift.io/cluster-monitoring: "true"
+{{- end }}

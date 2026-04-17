@@ -1,25 +1,18 @@
+{{- if .Values.moduleOptimizationDynamicSchedule.enabled }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: module-dynamic-schedule
+  name: module-optimization-dynamic-schedule
   namespace: openshift-gitops
   labels:
     demo.redhat.com/application: ""
 spec:
   project: default
   source:
-    repoURL: https://github.com/rhpds/ocp-virt-admin-rosetta-gitops.git
-    targetRevision: {{ .Values.targetRevision }}
-    path: "user/module-optimization/module-dynamic-schedule"
-    # helm:
-    #   values: |
-    #     user:
-    #       count: {{ .Values.user.count }}
-    #       base: {{ .Values.user.base }}
-    #     deployer:
-    #       domain: {{ .Values.deployer.domain }}
-    #       apiUrl: {{ .Values.deployer.apiUrl }}
+    repoURL: {{ .Values.moduleOptimizationDynamicSchedule.git.repoURL }}
+    targetRevision: {{ .Values.moduleOptimizationDynamicSchedule.git.targetRevision }}
+    path: {{ .Values.moduleOptimizationDynamicSchedule.git.path }}
   destination:
     server: https://kubernetes.default.svc
     namespace: dynamic-schedule
@@ -38,3 +31,4 @@ spec:
       jsonPointers:
         - /spec/replicas
         - /spec/template/spec/nodeSelector
+{{- end }}

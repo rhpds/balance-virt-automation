@@ -1,25 +1,18 @@
+{{- if .Values.moduleBasicsHotPlug.enabled }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: module-hot-plug
+  name: module-basics-hot-plug
   namespace: openshift-gitops
   labels:
     demo.redhat.com/application: ""
 spec:
   project: default
   source:
-    repoURL: https://github.com/rhpds/ocp-virt-admin-rosetta-gitops.git
-    targetRevision: {{ .Values.targetRevision }}
-    path: "user/module-basics/module-hot-plug"
-    # helm:
-    #   values: |
-    #     user:
-    #       count: {{ .Values.user.count }}
-    #       base: {{ .Values.user.base }}
-    #     deployer:
-    #       domain: {{ .Values.deployer.domain }}
-    #       apiUrl: {{ .Values.deployer.apiUrl }}
+    repoURL: {{ .Values.moduleBasicsHotPlug.git.repoURL }}
+    targetRevision: {{ .Values.moduleBasicsHotPlug.git.targetRevision }}
+    path: {{ .Values.moduleBasicsHotPlug.git.path }}
   destination:
     server: https://kubernetes.default.svc
     namespace: hot-plug
@@ -31,3 +24,4 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - SkipDryRunOnMissingResource=true
+{{- end }}

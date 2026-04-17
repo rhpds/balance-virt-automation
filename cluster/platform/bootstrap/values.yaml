@@ -29,6 +29,10 @@ default_settings: &git_defaults
   repoURL: https://github.com/rhpds/balance-virt-automation.git
   targetRevision: main
 
+syncPolicy:
+  automated:
+    enabled: true
+
 # ---------------------------------------------------------------------------
 # deployer — forwarded here verbatim from the infra bootstrap.
 # Used by templates that need the cluster domain (e.g., provision data ConfigMaps,
@@ -37,16 +41,46 @@ default_settings: &git_defaults
 deployer:
   domain: cluster.example.com
 
-# ---------------------------------------------------------------------------
-# platformExampleSharedGitlab — example of a cluster-wide shared service.
-# A GitLab CE instance shared across all tenant users. Disabled by default.
-# See cluster/platform/platform-example-shared-gitlab/ for the chart.
-# When enabled, the gitlab_url is automatically added to provision data.
-# ---------------------------------------------------------------------------
-platformExampleSharedGitlab:
-  enabled: false
+moduleBasicsHotPlug:
+  enabled: true
   git:
-    path: cluster/platform/platform-example-shared-gitlab
+    path: workloads_library/platform/module-basics/module-hot-plug
+    <<: *git_defaults
+
+moduleBasicsLiveMigrate:
+  enabled: true
+  git:
+    path: workloads_library/platform/module-basics/module-live-migrate
+    <<: *git_defaults
+
+moduleOptimizationAffinity:
+  enabled: true
+  git:
+    path: workloads_library/platform/module-optimization/module-affinity
+    <<: *git_defaults
+
+moduleOptimizationDynamicSchedule:
+  enabled: true
+  git:
+    path: workloads_library/platform/module-optimization/module-dynamic-schedule
+    <<: *git_defaults
+
+moduleOptimizationOverCommit:
+  enabled: true
+  git:
+    path: workloads_library/platform/module-optimization/module-over-commit
+    <<: *git_defaults
+
+moduleResilienceVmFencing:
+  enabled: true
+  git:
+    path: workloads_library/platform/module-reslience/module-vm-fencing
+    <<: *git_defaults
+
+moduleDecentralizedLiveMigrate:
+  enabled: true
+  git:
+    path: workloads_library/platform/module-decentralized/module-live-migrate
     <<: *git_defaults
 
 # ---------------------------------------------------------------------------
@@ -79,7 +113,7 @@ OAuthAccountOperator:
 # Descheduler — creates the Descheduler CR and MachineConfig after the operator installs.
 # Infra pair: deschedulerOperator (in infra values)
 descheduler:
-  enabled: false
+  enabled: true
   git:
     path: workloads_library/platform/descheduler
     <<: *git_defaults
@@ -95,7 +129,7 @@ gitlab:
 # KubeVirt (OpenShift Virtualization) — creates HyperConverged CR and StorageClass.
 # Infra pair: kubevirtOperator (in infra values)
 kubevirt:
-  enabled: false
+  enabled: true
   git:
     path: workloads_library/platform/kubevirt
     <<: *git_defaults
@@ -111,7 +145,7 @@ mtc:
 # Migration Toolkit for Virtualization — creates the ForkliftController CR.
 # Infra pair: mtvOperator (in infra values)
 mtv:
-  enabled: false
+  enabled: true
   git:
     path: workloads_library/platform/mtv
     <<: *git_defaults
@@ -119,7 +153,7 @@ mtv:
 # Node Health Check — patches the console plugin and creates remediation CRs.
 # Infra pair: nodeHealthCheckOperator (in infra values)
 nodeHealthCheck:
-  enabled: false
+  enabled: true
   git:
     path: workloads_library/platform/node-health-check
     <<: *git_defaults
@@ -127,7 +161,7 @@ nodeHealthCheck:
 # OpenShift Data Foundation — configures ODF StorageSystem and CSI tolerations.
 # Requires ODF operator to be installed at the cluster level (outside this repo).
 odf:
-  enabled: false
+  enabled: true
   git:
     path: workloads_library/platform/odf
     <<: *git_defaults
@@ -143,7 +177,7 @@ rhoai:
 # Web Terminal — deploys the Web Terminal operator and creates the WebTerminal CR.
 # No infra-layer pair; the operator installs via this chart directly.
 webterminal:
-  enabled: false
+  enabled: true
   git:
     path: workloads_library/platform/webterminal
     <<: *git_defaults
