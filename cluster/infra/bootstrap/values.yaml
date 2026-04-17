@@ -126,6 +126,7 @@ mtvOperator:
 # Platform pair: nodeHealthCheck (in platform values)
 nodeHealthCheckOperator:
   enabled: true
+  createOpeatorGroup: false # if selfNodeRemediationOperator.enabled is true, turn this off
   git:
     path: workloads_library/infra/node-health-check-operator
     <<: *git_defaults

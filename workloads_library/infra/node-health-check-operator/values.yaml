@@ -1,3 +1,6 @@
 operator:
   channel: stable
   installPlanApproval: Automatic
+
+nodeHealthCheckOperator:
+  createOpeatorGroup: false # if selfNodeRemediationOperator.enabled is true, turn this off
