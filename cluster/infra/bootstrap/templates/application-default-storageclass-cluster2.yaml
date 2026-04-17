@@ -11,7 +11,7 @@ spec:
     targetRevision: {{ .Values.defaultStorageclass.git.targetRevision }}
     path: {{ .Values.defaultStorageclass.git.path }}
   destination:
-    server: sno1
+    name: sno1
   syncPolicy:
     automated:
       enabled: true
