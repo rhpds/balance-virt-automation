@@ -1,0 +1,29 @@
+{{ if .Values.certManager.enabled -}}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager-{{ .Values.secondaryCluster.name }}
+  namespace: openshift-gitops
+spec:
+  project: infra
+  source:
+    repoURL: {{ .Values.certManager.git.repoURL }}
+    targetRevision: {{ .Values.certManager.git.targetRevision }}
+    path: {{ .Values.certManager.git.path }}
+  destination:
+    name: {{ .Values.secondaryCluster.name }}
+    namespace: cert-manager-operator
+  syncPolicy:
+    automated:
+      enabled: true
+    syncOptions:
+      - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
+      - RespectIgnoreDifferences=true
+    retry:
+      limit: 10
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+{{- end }}

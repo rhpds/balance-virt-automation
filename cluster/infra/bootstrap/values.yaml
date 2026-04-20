@@ -45,18 +45,6 @@ infra:
   argoSubscriptionHealthcheck:
     enabled: false
 
-keycloakInfra:
-  enabled: false
-  git:
-    path: workloads_library/infra/keycloak-charts/keycloak-infra
-    <<: *git_defaults
-
-keycloakResources:
-  enabled: false
-  git:
-    path: workloads_library/infra/keycloak-charts/keycloak-resources
-    <<: *git_defaults
-
 secondaryCluster:
   enabled: true
   name: cluster2
@@ -102,6 +90,19 @@ defaultStorageclass:
 #         enabled: true
 # ---------------------------------------------------------------------------
 platformValues: {}
+
+keycloakInfra:
+  enabled: false
+  git:
+    path: workloads_library/infra/keycloak-charts/keycloak-infra
+    <<: *git_defaults
+
+keycloakResources:
+  enabled: false
+  git:
+    path: workloads_library/infra/keycloak-charts/keycloak-resources
+    <<: *git_defaults
+
 
 # ===========================================================================
 # WORKLOADS LIBRARY
