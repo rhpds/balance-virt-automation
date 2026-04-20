@@ -55,6 +55,12 @@ certManager:
     path: workloads_library/infra/cert-manager
     <<: *git_defaults
 
+lvms:
+  enabled: true
+  git:
+    path: cluster/infra/lvms
+    <<: *git_defaults
+
 # ---------------------------------------------------------------------------
 # platform — spawns the platform bootstrap layer. Always keep enabled: true.
 # The platform bootstrap chart lives at cluster/platform/bootstrap/ and follows

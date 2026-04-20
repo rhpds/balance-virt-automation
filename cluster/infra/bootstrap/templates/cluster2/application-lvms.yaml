@@ -1,0 +1,30 @@
+{{ if .Values.secondaryCluster.enabled -}}
+{{ if .Values.lvms.enabled -}}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lvms-cluster2
+  namespace: openshift-gitops
+spec:
+  project: infra
+  source:
+    repoURL: {{ .Values.lvms.git.repoURL }}
+    targetRevision: {{ .Values.lvms.git.targetRevision }}
+    path: {{ .Values.lvms.git.path }}
+  destination:
+    name: {{ .Values.secondaryCluster.name }}
+  syncPolicy:
+    automated:
+      enabled: true
+    syncOptions:
+      - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
+      - RespectIgnoreDifferences=true
+    retry:
+      limit: 10
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+{{- end }}
+{{- end }}

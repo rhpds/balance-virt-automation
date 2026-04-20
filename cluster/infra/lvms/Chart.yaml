@@ -1,0 +1,9 @@
+apiVersion: v2
+name: lvms-operator
+description: Sets up the lvms-operator
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+# https://cloudcult.dev/quick-overview-lvm-storage-operator-for-single-node-openshift-sno-copy/
+# https://www.triton.co.uk/single-node-openshift-persistent-storage-using-the-lvm-operator/
