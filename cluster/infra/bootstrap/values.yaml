@@ -70,8 +70,19 @@ platform:
 # defaultStorageclass — sets the default StorageClass on the cluster.
 # Enabled by default. Disable only if you are managing StorageClass separately.
 # ---------------------------------------------------------------------------
+defaultStorageclassCluster2:
+  enabled: true
+  storageClassName: ocs-storagecluster-cephfs
+  git:
+    path: cluster/infra/default-storageclass
+    <<: *git_defaults
+
+# ---------------------------------------------------------------------------
+# defaultStorageclass — sets the default StorageClass on the cluster.
+# Enabled by default. Disable only if you are managing StorageClass separately.
+# ---------------------------------------------------------------------------
 defaultStorageclass:
-  enabled: false
+  enabled: true
   storageClassName: ocs-storagecluster-cephfs
   git:
     path: cluster/infra/default-storageclass

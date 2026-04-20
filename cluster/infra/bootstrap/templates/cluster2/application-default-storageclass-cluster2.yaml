@@ -1,4 +1,4 @@
-{{ if .Values.defaultStorageclass.enabled -}}
+{{ if .Values.defaultStorageclassCluster2.enabled -}}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -7,9 +7,9 @@ metadata:
 spec:
   project: infra
   source:
-    repoURL: {{ .Values.defaultStorageclass.git.repoURL }}
-    targetRevision: {{ .Values.defaultStorageclass.git.targetRevision }}
-    path: {{ .Values.defaultStorageclass.git.path }}
+    repoURL: {{ .Values.defaultStorageclassCluster2.git.repoURL }}
+    targetRevision: {{ .Values.defaultStorageclassCluster2.git.targetRevision }}
+    path: {{ .Values.defaultStorageclassCluster2.git.path }}
   destination:
     name: {{ .Values.secondaryCluster.name }}
   syncPolicy:
