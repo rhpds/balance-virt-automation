@@ -46,7 +46,7 @@ infra:
     enabled: false
 
 secondaryCluster:
-  enabled: true
+  enabled: false
   name: cluster2
 
 certManager:
