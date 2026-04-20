@@ -11,7 +11,7 @@ spec:
     targetRevision: {{ .Values.defaultStorageclass.git.targetRevision }}
     path: {{ .Values.defaultStorageclass.git.path }}
   destination:
-    name: sno1
+    name: {{ .Values.secondaryCluster.name }}
   syncPolicy:
     automated:
       enabled: true
