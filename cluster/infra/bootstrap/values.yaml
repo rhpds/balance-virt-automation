@@ -46,7 +46,7 @@ infra:
     enabled: false
 
 keycloakInfra:
-  enabled: true
+  enabled: false
   git:
     path: workloads_library/infra/keycloak-charts/keycloak-infra
     <<: *git_defaults
@@ -55,6 +55,16 @@ keycloakResources:
   enabled: false
   git:
     path: workloads_library/infra/keycloak-charts/keycloak-resources
+    <<: *git_defaults
+
+secondaryCluster:
+  enabled: true
+  name: cluster2
+
+certManager:
+  enabled: true
+  git:
+    path: workloads_library/infra/cert-manager
     <<: *git_defaults
 
 # ---------------------------------------------------------------------------
