@@ -83,7 +83,8 @@ platform:
 # Enabled by default. Disable only if you are managing StorageClass separately.
 # ---------------------------------------------------------------------------
 defaultStorageclass:
-  enabled: true
+  enabled: false
+  storageClassName: ocs-storagecluster-cephfs
   git:
     path: cluster/infra/default-storageclass
     <<: *git_defaults
