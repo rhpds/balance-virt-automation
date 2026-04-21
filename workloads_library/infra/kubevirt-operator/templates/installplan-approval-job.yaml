@@ -5,7 +5,7 @@ metadata:
   name: installplan-approval-job
   namespace: default
   annotations:
-    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-wave: "-10"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -13,7 +13,7 @@ kind: ClusterRoleBinding
 metadata:
   name: installplan-approval-job
   annotations:
-    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-wave: "-10"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -30,7 +30,7 @@ metadata:
   name: installplan-approval-job
   namespace: default
   annotations:
-    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-wave: "-10"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   template:

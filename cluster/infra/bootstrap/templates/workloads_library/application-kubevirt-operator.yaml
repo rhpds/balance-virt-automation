@@ -21,7 +21,6 @@ spec:
               syncwave: '3'
               serviceAccount:
                 name: "kubevirt-status-checker"
-
   destination:
     server: https://kubernetes.default.svc
     namespace: openshift-cnv
@@ -38,4 +37,9 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
+  ignoreDifferences:
+  - group: "hco.kubevirt.io"
+    kind: "HyperConverged"
+    jsonPointers:
+    - /spec/enableCommonBootImageImport
 {{- end }}
