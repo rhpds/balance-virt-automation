@@ -28,5 +28,5 @@ spec:
         maxDuration: 3m
     managedNamespaceMetadata:
       labels:
-        openshift.io/cluster-monitoring: true
+        openshift.io/cluster-monitoring: "true"
 {{- end }}
