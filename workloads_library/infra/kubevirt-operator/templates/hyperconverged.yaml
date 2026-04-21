@@ -14,4 +14,4 @@ spec:
       tolerations:
         {{ .Values.ocp4_workload_openshift_virtualization_workload_tolerations }}
 {{- end }}
-  enableCommonBootImageImport: {{ ternary "true" "false" (not .Values.external_ceph) }}
+  enableCommonBootImageImport: false
