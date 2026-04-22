@@ -31,4 +31,5 @@ spec:
     kind: "HyperConverged"
     jsonPointers:
     - /spec/enableCommonBootImageImport
+    - /spec/higherWorkloadDensity
 {{- end }}
