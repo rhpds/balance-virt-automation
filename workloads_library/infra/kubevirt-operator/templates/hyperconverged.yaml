@@ -15,4 +15,3 @@ spec:
         {{ .Values.ocp4_workload_openshift_virtualization_workload_tolerations }}
 {{- end }}
   enableCommonBootImageImport: false
-  decentralizedLiveMigration: true
