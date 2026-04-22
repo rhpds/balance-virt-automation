@@ -72,7 +72,7 @@ moduleOptimizationOverCommit:
     <<: *git_defaults
 
 moduleResilienceVmFencing:
-  enabled: true
+  enabled: false
   git:
     path: workloads_library/platform/module-reslience/module-vm-fencing
     <<: *git_defaults
