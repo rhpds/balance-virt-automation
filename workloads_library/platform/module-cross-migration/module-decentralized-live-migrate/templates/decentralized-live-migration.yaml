@@ -1,9 +1,9 @@
 # namespace creation handled by argocd
-# ---
-# apiVersion: v1
-# kind: Namespace
-# metadata:
-#   name: vm-live-migration-source
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vm-live-migration-source
 ---
 apiVersion: v1
 kind: Namespace
