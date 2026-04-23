@@ -1,0 +1,2 @@
+thinPoolSize: 50Gi
+storageClassName: lvms-vg1

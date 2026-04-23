@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: enable-image-registry
+  namespace: default
+  annotations:
+    argocd.argoproj.io/sync-wave: "-60"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: enable-image-registry
+  annotations:
+    argocd.argoproj.io/sync-wave: "-60"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: enable-image-registry
+  namespace: default
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: enable-image-registry
+  namespace: default
+  annotations:
+    argocd.argoproj.io/sync-wave: "-60"
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  backoffLimit: 10
+  template:
+    spec:
+      serviceAccountName: enable-image-registry
+      restartPolicy: Never
+      containers:
+      - name: enable-image-registry
+        image: bitnami/kubectl
+        command:
+        - /bin/bash
+        - -c
+        - |
+          set -euo pipefail
+
+          STATE=$(kubectl get configs.imageregistry.operator.openshift.io cluster \
+            -o jsonpath='{.spec.managementState}')
+          SC=$(kubectl get configs.imageregistry.operator.openshift.io cluster \
+            -o jsonpath='{.spec.storage.pvc.storageClassName}' 2>/dev/null || true)
+
+          if [ "$STATE" = "Managed" ] && [ "$SC" = "lvms-vg1" ]; then
+            echo "Image registry already Managed with lvms-vg1 PVC, skipping."
+            exit 0
+          fi
+
+          echo "Creating 10Gi PVC for image registry..."
+          kubectl apply -f - <<'EOF'
+          apiVersion: v1
+          kind: PersistentVolumeClaim
+          metadata:
+            name: image-registry-storage
+            namespace: openshift-image-registry
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 10Gi
+            storageClassName: lvms-vg1
+          EOF
+
+          echo "Setting image registry to Managed with PVC storage (lvms-vg1)..."
+          kubectl patch configs.imageregistry.operator.openshift.io cluster \
+            --type merge -p '{"spec":{"managementState":"Managed","storage":{"pvc":{"claim":"image-registry-storage","storageClassName":"lvms-vg1"}}}}'
+
+          echo "Done. Image registry is now Managed with lvms-vg1 PVC storage."

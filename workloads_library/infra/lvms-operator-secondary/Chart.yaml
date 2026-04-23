@@ -1,0 +1,6 @@
+apiVersion: v2
+name: lvms-operator
+description: LVM Storage Operator
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
