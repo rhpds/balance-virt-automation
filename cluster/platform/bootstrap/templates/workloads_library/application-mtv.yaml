@@ -12,6 +12,7 @@ spec:
     path: {{ .Values.mtv.git.path }}
   destination:
     server: https://kubernetes.default.svc
+    namespace: openshift-mtv
   syncPolicy:
     automated:
       enabled: true

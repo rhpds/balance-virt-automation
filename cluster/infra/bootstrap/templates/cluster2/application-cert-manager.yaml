@@ -1,3 +1,4 @@
+{{ if .Values.secondaryCluster.enabled -}}
 {{ if .Values.certManager.enabled -}}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -26,4 +27,5 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
+{{- end }}
 {{- end }}

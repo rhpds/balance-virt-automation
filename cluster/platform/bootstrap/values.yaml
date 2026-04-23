@@ -74,13 +74,13 @@ moduleOptimizationOverCommit:
 moduleResilienceVmFencing:
   enabled: true
   git:
-    path: workloads_library/platform/module-reslience/module-vm-fencing
+    path: workloads_library/platform/module-resilience/module-vm-fencing
     <<: *git_defaults
 
 moduleDecentralizedLiveMigrate:
   enabled: true
   git:
-    path: workloads_library/platform/module-decentralized/module-live-migrate
+    path: workloads_library/platform/module-cross-migration/module-decentralized-live-migrate
     <<: *git_defaults
 
 # ---------------------------------------------------------------------------

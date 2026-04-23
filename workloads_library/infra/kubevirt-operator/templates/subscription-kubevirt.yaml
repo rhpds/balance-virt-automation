@@ -6,15 +6,14 @@ metadata:
   name: kubevirt-hyperconverged
   namespace: openshift-cnv
   annotations:
-    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-wave: "-10"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   channel: stable
-  installPlanApproval: Manual
+  installPlanApproval: Automatic
   name: kubevirt-hyperconverged
   source: redhat-operators
   sourceNamespace: openshift-marketplace
-  startingCSV: kubevirt-hyperconverged-operator.v4.20.8
 {{- if .Values.kubevirt.config }}
 {{ .Values.kubevirt.config | indent 2 }}
   config:

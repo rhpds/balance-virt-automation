@@ -46,7 +46,7 @@ infra:
     enabled: false
 
 secondaryCluster:
-  enabled: true
+  enabled: false
   name: cluster2
 
 certManager:
@@ -134,7 +134,7 @@ keycloakResources:
 # rhacm Operator — evicts pods to rebalance nodes.
 # Platform pair: rhacm (in platform values)
 rhacmOperator:
-  enabled: true
+  enabled: false
   git:
     path: workloads_library/infra/rhacm-operator
     <<: *git_defaults

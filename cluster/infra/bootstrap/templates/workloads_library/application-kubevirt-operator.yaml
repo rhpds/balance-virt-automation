@@ -10,18 +10,6 @@ spec:
     repoURL: {{ .Values.kubevirtOperator.git.repoURL }}
     targetRevision: {{ .Values.kubevirtOperator.git.targetRevision }}
     path: {{ .Values.kubevirtOperator.git.path }}
-    helm:
-      values: |
-        helper-status-checker:
-          approver: true
-          checks:
-            - operatorName: kubevirt-operator
-              namespace:
-                name: openshift-cnv
-              syncwave: '3'
-              serviceAccount:
-                name: "kubevirt-status-checker"
-
   destination:
     server: https://kubernetes.default.svc
     namespace: openshift-cnv
@@ -38,4 +26,10 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
+  ignoreDifferences:
+  - group: "hco.kubevirt.io"
+    kind: "HyperConverged"
+    jsonPointers:
+    - /spec/enableCommonBootImageImport
+    - /spec/higherWorkloadDensity
 {{- end }}
