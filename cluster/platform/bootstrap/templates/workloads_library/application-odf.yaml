@@ -1,17 +1,19 @@
 {{ if .Values.odf.enabled -}}
+{{- range $dest := .Values.odf.destinations }}
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: odf
+  name: odf{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
   namespace: openshift-gitops
 spec:
   project: platform
   source:
-    repoURL: {{ .Values.odf.git.repoURL }}
-    targetRevision: {{ .Values.odf.git.targetRevision }}
-    path: {{ .Values.odf.git.path }}
+    repoURL: {{ $.Values.odf.git.repoURL }}
+    targetRevision: {{ $.Values.odf.git.targetRevision }}
+    path: {{ $.Values.odf.git.path }}
   destination:
-    server: https://kubernetes.default.svc
+    name: {{ $dest }}
     namespace: default
   syncPolicy:
     automated:
@@ -26,4 +28,5 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
+{{- end }}
 {{- end }}

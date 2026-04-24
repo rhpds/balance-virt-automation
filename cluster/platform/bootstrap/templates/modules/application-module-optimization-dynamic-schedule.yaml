@@ -1,24 +1,25 @@
 {{- if .Values.moduleOptimizationDynamicSchedule.enabled }}
+{{- range $dest := .Values.moduleOptimizationDynamicSchedule.destinations }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: module-optimization-dynamic-schedule
+  name: module-optimization-dynamic-schedule{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
   namespace: openshift-gitops
   labels:
     demo.redhat.com/application: ""
 spec:
   project: default
   source:
-    repoURL: {{ .Values.moduleOptimizationDynamicSchedule.git.repoURL }}
-    targetRevision: {{ .Values.moduleOptimizationDynamicSchedule.git.targetRevision }}
-    path: {{ .Values.moduleOptimizationDynamicSchedule.git.path }}
+    repoURL: {{ $.Values.moduleOptimizationDynamicSchedule.git.repoURL }}
+    targetRevision: {{ $.Values.moduleOptimizationDynamicSchedule.git.targetRevision }}
+    path: {{ $.Values.moduleOptimizationDynamicSchedule.git.path }}
   destination:
-    server: https://kubernetes.default.svc
+    name: {{ $dest }}
     namespace: dynamic-schedule
   syncPolicy:
     automated:
-      enabled: {{ .Values.syncPolicy.automated.enabled }}
+      enabled: {{ $.Values.syncPolicy.automated.enabled }}
     retry:
       limit: 10
     syncOptions:
@@ -31,4 +32,5 @@ spec:
       jsonPointers:
         - /spec/replicas
         - /spec/template/spec/nodeSelector
+{{- end }}
 {{- end }}

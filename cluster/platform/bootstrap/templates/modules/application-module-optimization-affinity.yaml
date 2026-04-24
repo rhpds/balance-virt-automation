@@ -1,24 +1,25 @@
 {{- if .Values.moduleOptimizationAffinity.enabled }}
+{{- range $dest := .Values.moduleOptimizationAffinity.destinations }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: module-optimization-affinity
+  name: module-optimization-affinity{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
   namespace: openshift-gitops
   labels:
     demo.redhat.com/application: ""
 spec:
   project: default
   source:
-    repoURL: {{ .Values.moduleOptimizationAffinity.git.repoURL }}
-    targetRevision: {{ .Values.moduleOptimizationAffinity.git.targetRevision }}
-    path: {{ .Values.moduleOptimizationAffinity.git.path }}
+    repoURL: {{ $.Values.moduleOptimizationAffinity.git.repoURL }}
+    targetRevision: {{ $.Values.moduleOptimizationAffinity.git.targetRevision }}
+    path: {{ $.Values.moduleOptimizationAffinity.git.path }}
   destination:
-    server: https://kubernetes.default.svc
+    name: {{ $dest }}
     namespace: affinity
   syncPolicy:
     automated:
-      enabled: {{ .Values.syncPolicy.automated.enabled }}
+      enabled: {{ $.Values.syncPolicy.automated.enabled }}
     retry:
       limit: 10
     syncOptions:
@@ -27,4 +28,5 @@ spec:
     managedNamespaceMetadata:
       labels:
         openshift.io/cluster-monitoring: "true"
+{{- end }}
 {{- end }}

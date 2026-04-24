@@ -1,24 +1,26 @@
 {{ if .Values.webterminal.enabled -}}
+{{- range $dest := .Values.webterminal.destinations }}
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: webterminal
+  name: webterminal{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
   namespace: openshift-gitops
 spec:
   project: platform
   source:
-    repoURL: {{ .Values.webterminal.git.repoURL }}
-    targetRevision: {{ .Values.webterminal.git.targetRevision }}
-    path: {{ .Values.webterminal.git.path }}
+    repoURL: {{ $.Values.webterminal.git.repoURL }}
+    targetRevision: {{ $.Values.webterminal.git.targetRevision }}
+    path: {{ $.Values.webterminal.git.path }}
     helm:
       values: |
         operator:
-          {{- if .Values.webterminal.startingCSV }}
-          startingCSV: {{ .Values.webterminal.startingCSV }}
+          {{- if $.Values.webterminal.startingCSV }}
+          startingCSV: {{ $.Values.webterminal.startingCSV }}
           {{- end }}
           installPlanApproval: Automatic
   destination:
-    server: https://kubernetes.default.svc
+    name: {{ $dest }}
   syncPolicy:
     automated:
       enabled: true
@@ -27,9 +29,10 @@ spec:
       - SkipDryRunOnMissingResource=true
       - RespectIgnoreDifferences=true
     retry:
-      limit: 10         # Max number of retry attempts
+      limit: 10
       backoff:
-        duration: 5s    # Initial wait time
-        factor: 2       # Multiply wait time by this factor each fail (5s, 10s, 20s...)
-        maxDuration: 3m # Cap the wait time at 3 minutes
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+{{- end }}
 {{- end }}

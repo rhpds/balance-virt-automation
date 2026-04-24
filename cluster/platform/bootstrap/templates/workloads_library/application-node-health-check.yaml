@@ -1,17 +1,19 @@
 {{ if .Values.nodeHealthCheck.enabled -}}
+{{- range $dest := .Values.nodeHealthCheck.destinations }}
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: node-health-check
+  name: node-health-check{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
   namespace: openshift-gitops
 spec:
   project: platform
   source:
-    repoURL: {{ .Values.nodeHealthCheck.git.repoURL }}
-    targetRevision: {{ .Values.nodeHealthCheck.git.targetRevision }}
-    path: {{ .Values.nodeHealthCheck.git.path }}
+    repoURL: {{ $.Values.nodeHealthCheck.git.repoURL }}
+    targetRevision: {{ $.Values.nodeHealthCheck.git.targetRevision }}
+    path: {{ $.Values.nodeHealthCheck.git.path }}
   destination:
-    server: https://kubernetes.default.svc
+    name: {{ $dest }}
     namespace: openshift-workload-availability
   syncPolicy:
     automated:
@@ -26,4 +28,5 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
+{{- end }}
 {{- end }}

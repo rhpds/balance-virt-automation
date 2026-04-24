@@ -1,24 +1,25 @@
 {{- if .Values.moduleResilienceVmFencing.enabled }}
+{{- range $dest := .Values.moduleResilienceVmFencing.destinations }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: module-resilience-vm-fencing
+  name: module-resilience-vm-fencing{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
   namespace: openshift-gitops
   labels:
     demo.redhat.com/application: ""
 spec:
   project: default
   source:
-    repoURL: {{ .Values.moduleResilienceVmFencing.git.repoURL }}
-    targetRevision: {{ .Values.moduleResilienceVmFencing.git.targetRevision }}
-    path: {{ .Values.moduleResilienceVmFencing.git.path }}
+    repoURL: {{ $.Values.moduleResilienceVmFencing.git.repoURL }}
+    targetRevision: {{ $.Values.moduleResilienceVmFencing.git.targetRevision }}
+    path: {{ $.Values.moduleResilienceVmFencing.git.path }}
   destination:
-    server: https://kubernetes.default.svc
+    name: {{ $dest }}
     namespace: fencing
   syncPolicy:
     automated:
-      enabled: {{ .Values.syncPolicy.automated.enabled }}
+      enabled: {{ $.Values.syncPolicy.automated.enabled }}
     retry:
       limit: 10
     syncOptions:
@@ -27,4 +28,5 @@ spec:
     managedNamespaceMetadata:
       labels:
         openshift.io/cluster-monitoring: "true"
+{{- end }}
 {{- end }}

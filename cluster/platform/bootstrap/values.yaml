@@ -29,6 +29,8 @@ default_settings: &git_defaults
   repoURL: https://github.com/rhpds/balance-virt-automation.git
   targetRevision: main
 
+secondary_cluster: &secondary cluster2
+
 syncPolicy:
   automated:
     enabled: true
@@ -43,61 +45,60 @@ deployer:
 
 moduleBasicsHotPlug:
   enabled: true
+  destinations:
+    - in-cluster
   git:
-    path: workloads_library/platform/module-basics/module-hot-plug
+    path: workloads_library/platform/module-basics-primary/module-hot-plug
     <<: *git_defaults
 
 moduleBasicsLiveMigrate:
   enabled: true
+  destinations:
+    - in-cluster
   git:
-    path: workloads_library/platform/module-basics/module-live-migrate
+    path: workloads_library/platform/module-basics-primary/module-live-migrate
     <<: *git_defaults
 
 moduleOptimizationAffinity:
   enabled: true
+  destinations:
+    - in-cluster
   git:
-    path: workloads_library/platform/module-optimization/module-affinity
+    path: workloads_library/platform/module-optimization-primary/module-affinity
     <<: *git_defaults
 
 moduleOptimizationDynamicSchedule:
   enabled: true
+  destinations:
+    - in-cluster
   git:
-    path: workloads_library/platform/module-optimization/module-dynamic-schedule
+    path: workloads_library/platform/module-optimization-primary/module-dynamic-schedule
     <<: *git_defaults
 
 moduleOptimizationOverCommit:
   enabled: true
+  destinations:
+    - in-cluster
   git:
-    path: workloads_library/platform/module-optimization/module-over-commit
+    path: workloads_library/platform/module-optimization-primary/module-over-commit
     <<: *git_defaults
 
 moduleResilienceVmFencing:
   enabled: true
+  destinations:
+    - in-cluster
   git:
-    path: workloads_library/platform/module-resilience/module-vm-fencing
+    path: workloads_library/platform/module-resilience-primary/module-vm-fencing
     <<: *git_defaults
 
 moduleDecentralizedLiveMigrate:
   enabled: true
+  destinations:
+    - in-cluster
   git:
-    path: workloads_library/platform/module-cross-migration/module-decentralized-live-migrate
+    path: workloads_library/platform/module-cross-migration-primary/module-decentralized-live-migrate
     <<: *git_defaults
 
-# ---------------------------------------------------------------------------
-# OAuthAccountOperator — manages HTPasswd/LDAP identity providers on the cluster.
-# Disabled by default. The `config` block below is passed to the operator chart.
-# ---------------------------------------------------------------------------
-OAuthAccountOperator:
-  enabled: false
-  authn: htpasswd
-  git:
-    path: helm
-    <<: *git_defaults
-  config:
-    type: HTPasswd
-    htpasswd:
-      htpasswdSecret:
-        name: htpasswd
 
 # ===========================================================================
 # WORKLOADS LIBRARY
@@ -114,8 +115,10 @@ OAuthAccountOperator:
 # Infra pair: deschedulerOperator (in infra values)
 descheduler:
   enabled: true
+  destinations:
+    - in-cluster
   git:
-    path: workloads_library/platform/descheduler
+    path: workloads_library/platform/descheduler-primary
     <<: *git_defaults
 
 # GitLab — deploys a full GitLab CE instance (Deployment + PostgreSQL + Redis).
@@ -146,24 +149,30 @@ mtc:
 # Infra pair: mtvOperator (in infra values)
 mtv:
   enabled: true
+  destinations:
+    - in-cluster
   git:
-    path: workloads_library/platform/mtv
+    path: workloads_library/platform/mtv-primary
     <<: *git_defaults
 
 # Node Health Check — patches the console plugin and creates remediation CRs.
 # Infra pair: nodeHealthCheckOperator (in infra values)
 nodeHealthCheck:
   enabled: true
+  destinations:
+    - in-cluster
   git:
-    path: workloads_library/platform/node-health-check
+    path: workloads_library/platform/node-health-check-primary
     <<: *git_defaults
 
 # OpenShift Data Foundation — configures ODF StorageSystem and CSI tolerations.
 # Requires ODF operator to be installed at the cluster level (outside this repo).
 odf:
   enabled: true
+  destinations:
+    - in-cluster
   git:
-    path: workloads_library/platform/odf
+    path: workloads_library/platform/odf-primary
     <<: *git_defaults
 
 # Red Hat OpenShift AI — creates DSCInitialization and DataScienceCluster CRs.
@@ -178,6 +187,9 @@ rhoai:
 # No infra-layer pair; the operator installs via this chart directly.
 webterminal:
   enabled: true
+  destinations:
+    - in-cluster
+    - *secondary
   git:
-    path: workloads_library/platform/webterminal
+    path: workloads_library/platform/webterminal-both
     <<: *git_defaults

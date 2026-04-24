@@ -1,24 +1,25 @@
 {{- if .Values.moduleDecentralizedLiveMigrate.enabled }}
+{{- range $dest := .Values.moduleDecentralizedLiveMigrate.destinations }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: module-decentralized-live-migrate
+  name: module-decentralized-live-migrate{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
   namespace: openshift-gitops
   labels:
     demo.redhat.com/application: ""
 spec:
   project: default
   source:
-    repoURL: {{ .Values.moduleDecentralizedLiveMigrate.git.repoURL }}
-    targetRevision: {{ .Values.moduleDecentralizedLiveMigrate.git.targetRevision }}
-    path: {{ .Values.moduleDecentralizedLiveMigrate.git.path }}
+    repoURL: {{ $.Values.moduleDecentralizedLiveMigrate.git.repoURL }}
+    targetRevision: {{ $.Values.moduleDecentralizedLiveMigrate.git.targetRevision }}
+    path: {{ $.Values.moduleDecentralizedLiveMigrate.git.path }}
   destination:
-    server: https://kubernetes.default.svc
+    name: {{ $dest }}
     namespace: vm-live-migration-source
   syncPolicy:
     automated:
-      enabled: {{ .Values.syncPolicy.automated.enabled }}
+      enabled: {{ $.Values.syncPolicy.automated.enabled }}
     retry:
       limit: 10
     syncOptions:
@@ -26,4 +27,5 @@ spec:
     managedNamespaceMetadata:
       labels:
         openshift.io/cluster-monitoring: "true"
+{{- end }}
 {{- end }}

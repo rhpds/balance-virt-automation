@@ -1,17 +1,19 @@
 {{ if .Values.mtvOperator.enabled -}}
+{{- range $dest := .Values.mtvOperator.destinations }}
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: mtv-operator
+  name: mtv-operator{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
   namespace: openshift-gitops
 spec:
   project: infra
   source:
-    repoURL: {{ .Values.mtvOperator.git.repoURL }}
-    targetRevision: {{ .Values.mtvOperator.git.targetRevision }}
-    path: {{ .Values.mtvOperator.git.path }}
+    repoURL: {{ $.Values.mtvOperator.git.repoURL }}
+    targetRevision: {{ $.Values.mtvOperator.git.targetRevision }}
+    path: {{ $.Values.mtvOperator.git.path }}
   destination:
-    server: https://kubernetes.default.svc
+    name: {{ $dest }}
     namespace: openshift-mtv
   syncPolicy:
     automated:
@@ -26,4 +28,5 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
+{{- end }}
 {{- end }}

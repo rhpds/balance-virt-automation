@@ -1,17 +1,19 @@
 {{ if .Values.kubevirtOperator.enabled -}}
+{{- range $dest := .Values.kubevirtOperator.destinations }}
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kubevirt-operator
+  name: kubevirt-operator{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
   namespace: openshift-gitops
 spec:
   project: infra
   source:
-    repoURL: {{ .Values.kubevirtOperator.git.repoURL }}
-    targetRevision: {{ .Values.kubevirtOperator.git.targetRevision }}
-    path: {{ .Values.kubevirtOperator.git.path }}
+    repoURL: {{ $.Values.kubevirtOperator.git.repoURL }}
+    targetRevision: {{ $.Values.kubevirtOperator.git.targetRevision }}
+    path: {{ $.Values.kubevirtOperator.git.path }}
   destination:
-    server: https://kubernetes.default.svc
+    name: {{ $dest }}
     namespace: openshift-cnv
   syncPolicy:
     automated:
@@ -32,4 +34,5 @@ spec:
     jsonPointers:
     - /spec/enableCommonBootImageImport
     - /spec/higherWorkloadDensity
+{{- end }}
 {{- end }}

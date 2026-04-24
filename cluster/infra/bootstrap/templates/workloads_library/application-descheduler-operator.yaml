@@ -1,17 +1,19 @@
 {{ if .Values.deschedulerOperator.enabled -}}
+{{- range $dest := .Values.deschedulerOperator.destinations }}
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: descheduler-operator
+  name: descheduler-operator{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
   namespace: openshift-gitops
 spec:
   project: infra
   source:
-    repoURL: {{ .Values.deschedulerOperator.git.repoURL }}
-    targetRevision: {{ .Values.deschedulerOperator.git.targetRevision }}
-    path: {{ .Values.deschedulerOperator.git.path }}
+    repoURL: {{ $.Values.deschedulerOperator.git.repoURL }}
+    targetRevision: {{ $.Values.deschedulerOperator.git.targetRevision }}
+    path: {{ $.Values.deschedulerOperator.git.path }}
   destination:
-    server: https://kubernetes.default.svc
+    name: {{ $dest }}
     namespace: openshift-kube-descheduler-operator
   syncPolicy:
     automated:
@@ -29,4 +31,5 @@ spec:
     managedNamespaceMetadata:
       labels:
         openshift.io/cluster-monitoring: "true"
+{{- end }}
 {{- end }}

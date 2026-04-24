@@ -1,23 +1,24 @@
 {{ if .Values.rhacmOperator.enabled -}}
+{{- range $dest := .Values.rhacmOperator.destinations }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: rhacm-operator
+  name: rhacm-operator{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
   namespace: openshift-gitops
 spec:
   project: infra
   source:
-    repoURL: {{ .Values.rhacmOperator.git.repoURL }}
-    targetRevision: {{ .Values.rhacmOperator.git.targetRevision }}
-    path: {{ .Values.rhacmOperator.git.path }}
+    repoURL: {{ $.Values.rhacmOperator.git.repoURL }}
+    targetRevision: {{ $.Values.rhacmOperator.git.targetRevision }}
+    path: {{ $.Values.rhacmOperator.git.path }}
     helm:
       values: |
         deployer:
-          domain: {{ .Values.deployer.domain }}
-          apiUrl: {{ .Values.deployer.apiUrl }}
+          domain: {{ $.Values.deployer.domain }}
+          apiUrl: {{ $.Values.deployer.apiUrl }}
   destination:
-    server: https://kubernetes.default.svc
+    name: {{ $dest }}
     namespace: open-cluster-management
   syncPolicy:
     automated:
@@ -26,4 +27,5 @@ spec:
       - CreateNamespace=true
       - SkipDryRunOnMissingResource=true
       - RespectIgnoreDifferences=true
+{{- end }}
 {{- end }}

@@ -1,17 +1,20 @@
-{{ if .Values.defaultStorageclassCluster2.enabled -}}
+{{ if .Values.certManager.enabled -}}
+{{- range $dest := .Values.certManager.destinations }}
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: default-storageclass-cluster2
+  name: cert-manager-operator{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
   namespace: openshift-gitops
 spec:
   project: infra
   source:
-    repoURL: {{ .Values.defaultStorageclassCluster2.git.repoURL }}
-    targetRevision: {{ .Values.defaultStorageclassCluster2.git.targetRevision }}
-    path: {{ .Values.defaultStorageclassCluster2.git.path }}
+    repoURL: {{ $.Values.certManager.git.repoURL }}
+    targetRevision: {{ $.Values.certManager.git.targetRevision }}
+    path: {{ $.Values.certManager.git.path }}
   destination:
-    name: {{ .Values.secondaryCluster.name }}
+    name: {{ $dest }}
+    namespace: cert-manager-operator
   syncPolicy:
     automated:
       enabled: true
@@ -25,4 +28,5 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
+{{- end }}
 {{- end }}

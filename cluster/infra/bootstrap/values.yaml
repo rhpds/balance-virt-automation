@@ -45,20 +45,22 @@ infra:
   argoSubscriptionHealthcheck:
     enabled: false
 
-secondaryCluster:
-  enabled: false
-  name: cluster2
+secondary_cluster: &secondary cluster2
 
 certManager:
   enabled: true
+  destinations:
+    - *secondary
   git:
-    path: workloads_library/infra/cert-manager
+    path: workloads_library/infra/cert-manager-operator-secondary
     <<: *git_defaults
 
 lvms:
   enabled: true
+  destinations:
+    - *secondary
   git:
-    path: cluster/infra/lvms
+    path: workloads_library/infra/lvms-operator-secondary
     <<: *git_defaults
 
 # ---------------------------------------------------------------------------
@@ -76,11 +78,13 @@ platform:
 # defaultStorageclass — sets the default StorageClass on the cluster.
 # Enabled by default. Disable only if you are managing StorageClass separately.
 # ---------------------------------------------------------------------------
-defaultStorageclassCluster2:
+defaultStorageclassCluster:
   enabled: false
   storageClassName: ocs-storagecluster-cephfs
+  destinations:
+    - *secondary
   git:
-    path: cluster/infra/default-storageclass
+    path: workloads_library/infra/default-storageclass-primary
     <<: *git_defaults
 
 # ---------------------------------------------------------------------------
@@ -90,8 +94,10 @@ defaultStorageclassCluster2:
 defaultStorageclass:
   enabled: true
   storageClassName: ocs-storagecluster-cephfs
+  destinations:
+    - in-cluster
   git:
-    path: cluster/infra/default-storageclass
+    path: workloads_library/infra/default-storageclass-primary
     <<: *git_defaults
 
 # ---------------------------------------------------------------------------
@@ -108,18 +114,6 @@ defaultStorageclass:
 # ---------------------------------------------------------------------------
 platformValues: {}
 
-keycloakInfra:
-  enabled: false
-  git:
-    path: workloads_library/infra/keycloak-charts/keycloak-infra
-    <<: *git_defaults
-
-keycloakResources:
-  enabled: false
-  git:
-    path: workloads_library/infra/keycloak-charts/keycloak-resources
-    <<: *git_defaults
-
 
 # ===========================================================================
 # WORKLOADS LIBRARY
@@ -135,32 +129,41 @@ keycloakResources:
 # Platform pair: rhacm (in platform values)
 rhacmOperator:
   enabled: false
+  destinations:
+    - in-cluster
   git:
-    path: workloads_library/infra/rhacm-operator
+    path: workloads_library/infra/rhacm-operator-primary
     <<: *git_defaults
 
 # Descheduler Operator — evicts pods to rebalance nodes.
 # Platform pair: descheduler (in platform values)
 deschedulerOperator:
   enabled: true
+  destinations:
+    - in-cluster
   git:
-    path: workloads_library/infra/descheduler-operator
+    path: workloads_library/infra/descheduler-operator-primary
     <<: *git_defaults
 
 # KubeVirt (OpenShift Virtualization) Operator — runs VMs on OpenShift.
 # Platform pair: kubevirt (in platform values)
 kubevirtOperator:
   enabled: true
+  destinations:
+    - in-cluster
+    - *secondary
   git:
-    path: workloads_library/infra/kubevirt-operator
+    path: workloads_library/infra/kubevirt-operator-both
     <<: *git_defaults
 
 # Migration Toolkit for Virtualization Operator.
 # Platform pair: mtv (in platform values)
 mtvOperator:
   enabled: true
+  destinations:
+    - in-cluster
   git:
-    path: workloads_library/infra/mtv-operator
+    path: workloads_library/infra/mtv-operator-primary
     <<: *git_defaults
 
 # Node Health Check Operator.
@@ -168,14 +171,18 @@ mtvOperator:
 nodeHealthCheckOperator:
   enabled: true
   createOpeatorGroup: false # if selfNodeRemediationOperator.enabled is true, turn this off
+  destinations:
+    - in-cluster
   git:
-    path: workloads_library/infra/node-health-check-operator
+    path: workloads_library/infra/node-health-check-operator-primary
     <<: *git_defaults
 
 # Self Node Remediation Operator.
 # No separate platform-layer workload; the operator self-configures.
 selfNodeRemediationOperator:
   enabled: true
+  destinations:
+    - in-cluster
   git:
-    path: workloads_library/infra/self-node-remediation-operator
+    path: workloads_library/infra/self-node-remediation-operator-primary
     <<: *git_defaults

@@ -1,17 +1,19 @@
 {{ if .Values.descheduler.enabled -}}
+{{- range $dest := .Values.descheduler.destinations }}
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: descheduler
+  name: descheduler{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
   namespace: openshift-gitops
 spec:
   project: platform
   source:
-    repoURL: {{ .Values.descheduler.git.repoURL }}
-    targetRevision: {{ .Values.descheduler.git.targetRevision }}
-    path: {{ .Values.descheduler.git.path }}
+    repoURL: {{ $.Values.descheduler.git.repoURL }}
+    targetRevision: {{ $.Values.descheduler.git.targetRevision }}
+    path: {{ $.Values.descheduler.git.path }}
   destination:
-    server: https://kubernetes.default.svc
+    name: {{ $dest }}
   syncPolicy:
     automated:
       enabled: true
@@ -34,4 +36,5 @@ spec:
       jsonPointers:
         - /spec/mode
         - /spec/deschedulingIntervalSeconds
+{{- end }}
 {{- end }}

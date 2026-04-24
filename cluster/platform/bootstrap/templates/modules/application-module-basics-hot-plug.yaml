@@ -1,27 +1,29 @@
 {{- if .Values.moduleBasicsHotPlug.enabled }}
+{{- range $dest := .Values.moduleBasicsHotPlug.destinations }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: module-basics-hot-plug
+  name: module-basics-hot-plug{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
   namespace: openshift-gitops
   labels:
     demo.redhat.com/application: ""
 spec:
   project: default
   source:
-    repoURL: {{ .Values.moduleBasicsHotPlug.git.repoURL }}
-    targetRevision: {{ .Values.moduleBasicsHotPlug.git.targetRevision }}
-    path: {{ .Values.moduleBasicsHotPlug.git.path }}
+    repoURL: {{ $.Values.moduleBasicsHotPlug.git.repoURL }}
+    targetRevision: {{ $.Values.moduleBasicsHotPlug.git.targetRevision }}
+    path: {{ $.Values.moduleBasicsHotPlug.git.path }}
   destination:
-    server: https://kubernetes.default.svc
+    name: {{ $dest }}
     namespace: hot-plug
   syncPolicy:
     automated:
-      enabled: {{ .Values.syncPolicy.automated.enabled }}
+      enabled: {{ $.Values.syncPolicy.automated.enabled }}
     retry:
       limit: 10
     syncOptions:
       - CreateNamespace=true
       - SkipDryRunOnMissingResource=true
+{{- end }}
 {{- end }}

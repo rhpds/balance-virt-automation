@@ -1,17 +1,19 @@
 {{ if .Values.selfNodeRemediationOperator.enabled -}}
+{{- range $dest := .Values.selfNodeRemediationOperator.destinations }}
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: self-node-remediation-operator
+  name: self-node-remediation-operator{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
   namespace: openshift-gitops
 spec:
   project: infra
   source:
-    repoURL: {{ .Values.selfNodeRemediationOperator.git.repoURL }}
-    targetRevision: {{ .Values.selfNodeRemediationOperator.git.targetRevision }}
-    path: {{ .Values.selfNodeRemediationOperator.git.path }}
+    repoURL: {{ $.Values.selfNodeRemediationOperator.git.repoURL }}
+    targetRevision: {{ $.Values.selfNodeRemediationOperator.git.targetRevision }}
+    path: {{ $.Values.selfNodeRemediationOperator.git.path }}
   destination:
-    server: https://kubernetes.default.svc
+    name: {{ $dest }}
     namespace: openshift-workload-availability
   syncPolicy:
     automated:
@@ -26,4 +28,5 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
+{{- end }}
 {{- end }}

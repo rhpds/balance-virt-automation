@@ -11,8 +11,7 @@ spec:
       - name: vg1
         default: true
         deviceSelector:
-          paths:
-            - /dev/vdf
+          forceWipeDevicesAndDestroyAllData: true
         thinPoolConfig:
           name: thin-pool-1
           sizePercent: 90

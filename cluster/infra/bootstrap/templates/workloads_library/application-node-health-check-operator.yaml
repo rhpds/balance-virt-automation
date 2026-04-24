@@ -1,17 +1,19 @@
 {{ if .Values.nodeHealthCheckOperator.enabled -}}
+{{- range $dest := .Values.nodeHealthCheckOperator.destinations }}
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: node-health-check-operator
+  name: node-health-check-operator{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
   namespace: openshift-gitops
 spec:
   project: infra
   source:
-    repoURL: {{ .Values.nodeHealthCheckOperator.git.repoURL }}
-    targetRevision: {{ .Values.nodeHealthCheckOperator.git.targetRevision }}
-    path: {{ .Values.nodeHealthCheckOperator.git.path }}
+    repoURL: {{ $.Values.nodeHealthCheckOperator.git.repoURL }}
+    targetRevision: {{ $.Values.nodeHealthCheckOperator.git.targetRevision }}
+    path: {{ $.Values.nodeHealthCheckOperator.git.path }}
   destination:
-    server: https://kubernetes.default.svc
+    name: {{ $dest }}
     namespace: openshift-workload-availability
   syncPolicy:
     automated:
@@ -26,4 +28,5 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
+{{- end }}
 {{- end }}

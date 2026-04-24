@@ -1,27 +1,29 @@
 {{- if .Values.moduleOptimizationOverCommit.enabled }}
+{{- range $dest := .Values.moduleOptimizationOverCommit.destinations }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: module-optimization-over-commit
+  name: module-optimization-over-commit{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
   namespace: openshift-gitops
   labels:
     demo.redhat.com/application: ""
 spec:
   project: default
   source:
-    repoURL: {{ .Values.moduleOptimizationOverCommit.git.repoURL }}
-    targetRevision: {{ .Values.moduleOptimizationOverCommit.git.targetRevision }}
-    path: {{ .Values.moduleOptimizationOverCommit.git.path }}
+    repoURL: {{ $.Values.moduleOptimizationOverCommit.git.repoURL }}
+    targetRevision: {{ $.Values.moduleOptimizationOverCommit.git.targetRevision }}
+    path: {{ $.Values.moduleOptimizationOverCommit.git.path }}
   destination:
-    server: https://kubernetes.default.svc
+    name: {{ $dest }}
     namespace: over-commit
   syncPolicy:
     automated:
-      enabled: {{ .Values.syncPolicy.automated.enabled }}
+      enabled: {{ $.Values.syncPolicy.automated.enabled }}
     retry:
       limit: 10
     syncOptions:
       - CreateNamespace=true
       - SkipDryRunOnMissingResource=true
+{{- end }}
 {{- end }}
