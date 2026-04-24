@@ -38,7 +38,7 @@ spec:
       restartPolicy: Never
       containers:
       - name: enable-image-registry
-        image: bitnami/kubectl
+        image: bitnami/kubectl:latest
         command:
         - /bin/bash
         - -c

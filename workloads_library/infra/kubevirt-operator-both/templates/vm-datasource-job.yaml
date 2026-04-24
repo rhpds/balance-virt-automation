@@ -41,7 +41,7 @@ spec:
       serviceAccountName: vm-datastore-job
       containers:
       - name: vm-datastore-job
-        image: bitnami/kubectl:latest
+        image: image-registry.openshift-image-registry.svc:5000/openshift/cli
         command:
         - /bin/sh
         - -c
@@ -49,10 +49,10 @@ spec:
           echo "######################"
           echo "# Patch the storage profile to use PVC instead of snapshot"
           echo "######################"
-          kubectl patch StorageProfile/ocs-external-storagecluster-ceph-rbd --type=merge -p '{"spec":{"dataImportCronSourceFormat": "pvc"}}'
+          oc patch StorageProfile/ocs-external-storagecluster-ceph-rbd --type=merge -p '{"spec":{"dataImportCronSourceFormat": "pvc"}}'
 
           echo "######################"
           echo "# Patch the hyperconverged to import boot sources using PVCs"
           echo "######################"
 
-          kubectl patch HyperConverged/kubevirt-hyperconverged -n openshift-cnv --type=merge -p '{"spec":{"enableCommonBootImageImport": true}}'
+          oc patch HyperConverged/kubevirt-hyperconverged -n openshift-cnv --type=merge -p '{"spec":{"enableCommonBootImageImport": true}}'

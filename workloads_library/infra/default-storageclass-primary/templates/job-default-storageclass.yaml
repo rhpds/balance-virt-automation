@@ -55,7 +55,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: set-default-sc
-          image: registry.redhat.io/openshift4/ose-cli:latest
+          image: image-registry.openshift-image-registry.svc:5000/openshift/cli
           command:
             - /bin/bash
             - -c

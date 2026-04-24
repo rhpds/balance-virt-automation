@@ -5,14 +5,14 @@ metadata:
   name: lvms-discover-devices
   namespace: openshift-storage
   annotations:
-    argocd.argoproj.io/sync-wave: "-46"
+    argkubectld.argoproj.io/sync-wave: "-46"
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: lvms-discover-devices
   annotations:
-    argocd.argoproj.io/sync-wave: "-46"
+    argkubectld.argoproj.io/sync-wave: "-46"
 rules:
   - apiGroups: [""]
     resources: ["nodes"]
@@ -33,7 +33,7 @@ kind: ClusterRoleBinding
 metadata:
   name: lvms-discover-devices
   annotations:
-    argocd.argoproj.io/sync-wave: "-46"
+    argkubectld.argoproj.io/sync-wave: "-46"
 subjects:
   - kind: ServiceAccount
     name: lvms-discover-devices
@@ -49,9 +49,9 @@ metadata:
   name: lvms-discover-devices
   namespace: openshift-storage
   annotations:
-    argocd.argoproj.io/sync-wave: "-46"
-    argocd.argoproj.io/hook: Sync
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    argkubectld.argoproj.io/sync-wave: "-46"
+    argkubectld.argoproj.io/hook: Sync
+    argkubectld.argoproj.io/hook-delete-policy: HookSucceeded
 spec:
   backoffLimit: 5
   template:
@@ -69,7 +69,7 @@ spec:
               set -euo pipefail
 
               echo "============================================"
-              echo "  LVMS Available Block Device Discovery"
+              echo "  LVMS Available Blkubectlk Device Discovery"
               echo "============================================"
 
               NODES=$(kubectl get nodes -l node-role.kubernetes.io/worker -o jsonpath='{.items[*].metadata.name}')
@@ -100,14 +100,14 @@ spec:
                 hostPID: false
                 containers:
                 - name: discover
-                  image: busybox:latest
+                  image: registry.redhat.io/rhel9/rhel-minimal:latest
                   securityContext:
                     privileged: true
                   command:
                   - /bin/sh
                   - -c
                   - |
-                    echo "Available block devices (unmounted, no partitions, no holders):"
+                    echo "Available blkubectlk devices (unmounted, no partitions, no holders):"
                     echo "TYPE    SIZE     PATH"
                     echo "----    ----     ----"
                     lsblk -dpno NAME,TYPE,SIZE,MOUNTPOINT | while read -r NAME TYPE SIZE MOUNT; do
@@ -117,9 +117,9 @@ spec:
                       [ "\$TYPE" != "disk" ] && continue
                       # Skip if device has partitions or holders
                       BASENAME=\$(basename "\$NAME")
-                      HOLDERS=\$(ls /sys/block/\$BASENAME/holders/ 2>/dev/null)
+                      HOLDERS=\$(ls /sys/blkubectlk/\$BASENAME/holders/ 2>/dev/null)
                       [ -n "\$HOLDERS" ] && continue
-                      PARTS=\$(ls /sys/block/\$BASENAME/*/partition 2>/dev/null)
+                      PARTS=\$(ls /sys/blkubectlk/\$BASENAME/*/partition 2>/dev/null)
                       [ -n "\$PARTS" ] && continue
                       echo "\$TYPE    \$SIZE    \$NAME"
                     done

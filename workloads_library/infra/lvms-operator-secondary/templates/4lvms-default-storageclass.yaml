@@ -4,14 +4,14 @@ metadata:
   name: lvms-default-storageclass
   namespace: openshift-storage
   annotations:
-    argocd.argoproj.io/sync-wave: "-40"
+    argkubectld.argoproj.io/sync-wave: "-40"
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: lvms-default-storageclass
   annotations:
-    argocd.argoproj.io/sync-wave: "-40"
+    argkubectld.argoproj.io/sync-wave: "-40"
 rules:
   - apiGroups: ["storage.k8s.io"]
     resources: ["storageclasses"]
@@ -22,7 +22,7 @@ kind: ClusterRoleBinding
 metadata:
   name: lvms-default-storageclass
   annotations:
-    argocd.argoproj.io/sync-wave: "-40"
+    argkubectld.argoproj.io/sync-wave: "-40"
 subjects:
   - kind: ServiceAccount
     name: lvms-default-storageclass
@@ -38,7 +38,7 @@ metadata:
   name: lvms-default-storageclass
   namespace: openshift-storage
   annotations:
-    argocd.argoproj.io/sync-wave: "-40"
+    argkubectld.argoproj.io/sync-wave: "-40"
 spec:
   backoffLimit: 30
   template:
