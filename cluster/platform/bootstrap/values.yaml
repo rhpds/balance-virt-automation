@@ -168,7 +168,7 @@ nodeHealthCheck:
 # OpenShift Data Foundation — configures ODF StorageSystem and CSI tolerations.
 # Requires ODF operator to be installed at the cluster level (outside this repo).
 odf:
-  enabled: true
+  enabled: false
   destinations:
     - in-cluster
   git:
