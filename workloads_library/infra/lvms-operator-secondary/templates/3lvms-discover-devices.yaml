@@ -1,3 +1,4 @@
+{{- if .Values.discoverDevicesJob.enabled }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -141,3 +142,4 @@ spec:
               echo "  LVMS will auto-discover and use all"
               echo "  available devices listed above."
               echo "============================================"
+{{- end }}

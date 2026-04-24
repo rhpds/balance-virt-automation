@@ -1,2 +1,4 @@
 thinPoolSize: 50Gi
 storageClassName: lvms-vg1
+discoverDevicesJob:
+  enabled: false
