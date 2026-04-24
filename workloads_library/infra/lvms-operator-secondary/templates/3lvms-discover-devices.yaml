@@ -60,7 +60,7 @@ spec:
       hostPID: false
       containers:
         - name: discover
-          image: registry.redhat.io/openshift4/ose-cli:latest
+          image: bitnami/kubectl:latest
           command:
             - /bin/bash
             - -c
@@ -71,7 +71,7 @@ spec:
               echo "  LVMS Available Block Device Discovery"
               echo "============================================"
 
-              NODES=$(oc get nodes -l node-role.kubernetes.io/worker -o jsonpath='{.items[*].metadata.name}')
+              NODES=$(kubectl get nodes -l node-role.kubernetes.io/worker -o jsonpath='{.items[*].metadata.name}')
               if [ -z "$NODES" ]; then
                 echo "No worker nodes found."
                 exit 1
@@ -84,7 +84,7 @@ spec:
                 POD_NAME="lvms-discover-${NODE%%.*}"
                 POD_NAME="${POD_NAME:0:63}"
 
-                cat <<PODEOF | oc apply -f -
+                cat <<PODEOF | kubectl apply -f -
               apiVersion: v1
               kind: Pod
               metadata:
@@ -99,11 +99,11 @@ spec:
                 hostPID: false
                 containers:
                 - name: discover
-                  image: registry.redhat.io/rhel9/rhel-minimal:latest
+                  image: busybox:latest
                   securityContext:
                     privileged: true
                   command:
-                  - /bin/bash
+                  - /bin/sh
                   - -c
                   - |
                     echo "Available block devices (unmounted, no partitions, no holders):"
@@ -125,14 +125,14 @@ spec:
               PODEOF
 
                 echo "Waiting for discovery pod on ${NODE}..."
-                oc wait --for=condition=Ready pod/${POD_NAME} -n openshift-storage --timeout=60s 2>/dev/null || true
+                kubectl wait --for=condition=Ready pod/${POD_NAME} -n openshift-storage --timeout=60s 2>/dev/null || true
                 sleep 5
-                oc wait --for=jsonpath='{.status.phase}'=Succeeded pod/${POD_NAME} -n openshift-storage --timeout=120s 2>/dev/null || true
+                kubectl wait --for=jsonpath='{.status.phase}'=Succeeded pod/${POD_NAME} -n openshift-storage --timeout=120s 2>/dev/null || true
 
                 echo ""
-                oc logs ${POD_NAME} -n openshift-storage 2>/dev/null || echo "(could not retrieve logs)"
+                kubectl logs ${POD_NAME} -n openshift-storage 2>/dev/null || echo "(could not retrieve logs)"
 
-                oc delete pod ${POD_NAME} -n openshift-storage --ignore-not-found=true 2>/dev/null || true
+                kubectl delete pod ${POD_NAME} -n openshift-storage --ignore-not-found=true 2>/dev/null || true
               done
 
               echo ""
