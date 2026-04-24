@@ -47,7 +47,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: set-default
-          image: bitnami/kubectl:latest
+          image: registry.redhat.io/openshift4/ose-cli:latest
           command:
             - /bin/bash
             - -c

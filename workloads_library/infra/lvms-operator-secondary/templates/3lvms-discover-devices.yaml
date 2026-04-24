@@ -61,7 +61,7 @@ spec:
       hostPID: false
       containers:
         - name: discover
-          image: bitnami/kubectl:latest
+          image: registry.redhat.io/openshift4/ose-cli:latest
           command:
             - /bin/bash
             - -c
