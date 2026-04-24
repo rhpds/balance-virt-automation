@@ -55,6 +55,14 @@ certManager:
     path: workloads_library/infra/cert-manager-operator-secondary
     <<: *git_defaults
 
+imageRegistry:
+  enabled: true
+  destinations:
+    - *secondary
+  git:
+    path: workloads_library/infra/image-registry-secondary
+    <<: *git_defaults
+
 lvms:
   enabled: true
   destinations:

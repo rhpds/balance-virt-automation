@@ -1,0 +1,31 @@
+{{ if .Values.imageRegistry.enabled -}}
+{{- range $dest := .Values.imageRegistry.destinations }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: image-registry{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
+  namespace: openshift-gitops
+spec:
+  project: infra
+  source:
+    repoURL: {{ $.Values.imageRegistry.git.repoURL }}
+    targetRevision: {{ $.Values.imageRegistry.git.targetRevision }}
+    path: {{ $.Values.imageRegistry.git.path }}
+  destination:
+    name: {{ $dest }}
+  syncPolicy:
+    automated:
+      enabled: true
+    syncOptions:
+      - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
+      - RespectIgnoreDifferences=true
+    retry:
+      limit: 10
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+{{- end }}
+{{- end }}
