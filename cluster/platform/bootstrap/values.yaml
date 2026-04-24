@@ -27,7 +27,7 @@
 # ---------------------------------------------------------------------------
 default_settings: &git_defaults
   repoURL: https://github.com/rhpds/balance-virt-automation.git
-  targetRevision: main
+  targetRevision: cross-cluster
 
 secondary_cluster: &secondary cluster2
 
