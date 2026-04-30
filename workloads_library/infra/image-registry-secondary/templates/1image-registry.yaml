@@ -71,8 +71,8 @@ spec:
             storageClassName: lvms-vg1
           EOF
 
-          echo "Setting image registry to Managed with PVC storage (lvms-vg1)..."
+          echo "Setting image registry to Managed with PVC storage (lvms-vg1) and Recreate rollout..."
           kubectl patch configs.imageregistry.operator.openshift.io cluster \
-            --type merge -p '{"spec":{"managementState":"Managed","storage":{"pvc":{"claim":"image-registry-storage","storageClassName":"lvms-vg1"}}}}'
+            --type merge -p '{"spec":{"managementState":"Managed","rolloutStrategy":"Recreate","replicas":1,"storage":{"pvc":{"claim":"image-registry-storage","storageClassName":"lvms-vg1"}}}}'
 
           echo "Done. Image registry is now Managed with lvms-vg1 PVC storage."
