@@ -1,0 +1,15 @@
+---
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  name: {{ .Values.managedCluster.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+  labels:
+    name: {{ .Values.managedCluster.name }}
+    vendor: {{ .Values.managedCluster.vendor }}
+    cloud: {{ .Values.managedCluster.cloudProvider }}
+    cluster.open-cluster-management.io/clusterset: {{ .Values.managedCluster.clusterSet }}
+spec:
+  hubAcceptsClient: true

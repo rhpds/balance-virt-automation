@@ -1,0 +1,7 @@
+managedCluster:
+  name: ""
+  apiUrl: ""
+  token: ""
+  clusterSet: default
+  vendor: OpenShift
+  cloudProvider: Other

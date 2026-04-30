@@ -47,6 +47,9 @@ infra:
 
 secondary_cluster: &secondary cluster2
 
+clusters: {}
+
+
 certManager:
   enabled: true
   destinations:
@@ -133,7 +136,15 @@ platformValues: {}
 # See each workload's README in workloads_library/infra/<name>/ for details.
 # ===========================================================================
 
-# rhacm Operator — evicts pods to rebalance nodes.
+# RHACM Managed Cluster — imports the secondary cluster into RHACM via auto-import.
+# Requires rhacmOperator to be enabled and the clusters map to contain the secondary cluster.
+rhacmManagedCluster:
+  enabled: true
+  git:
+    path: workloads_library/infra/rhacm-managed-cluster-primary
+    <<: *git_defaults
+
+# rhacm Operator — installs the ACM operator and MultiClusterHub.
 # Platform pair: rhacm (in platform values)
 rhacmOperator:
   enabled: true

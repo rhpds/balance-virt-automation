@@ -1,0 +1,34 @@
+{{ if .Values.rhacmManagedCluster.enabled -}}
+{{- range $name, $cluster := .Values.clusters }}
+{{- if hasSuffix $.Values.secondary_cluster $name }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rhacm-managed-cluster-{{ $name }}
+  namespace: openshift-gitops
+spec:
+  project: infra
+  source:
+    repoURL: {{ $.Values.rhacmManagedCluster.git.repoURL }}
+    targetRevision: {{ $.Values.rhacmManagedCluster.git.targetRevision }}
+    path: {{ $.Values.rhacmManagedCluster.git.path }}
+    helm:
+      values: |
+        managedCluster:
+          name: {{ $name }}
+          apiUrl: {{ $cluster.api_url }}
+          token: {{ $cluster.token }}
+  destination:
+    name: in-cluster
+    namespace: open-cluster-management
+  syncPolicy:
+    automated:
+      enabled: true
+    syncOptions:
+      - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
+      - RespectIgnoreDifferences=true
+{{- end }}
+{{- end }}
+{{- end }}
