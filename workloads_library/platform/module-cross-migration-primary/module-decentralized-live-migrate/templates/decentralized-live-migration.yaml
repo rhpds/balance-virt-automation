@@ -33,7 +33,7 @@ spec:
         resources:
           requests:
             storage: 30Gi
-  runStrategy: Manual
+  runStrategy: RestartOnFailure
   template:
     metadata:
       annotations:

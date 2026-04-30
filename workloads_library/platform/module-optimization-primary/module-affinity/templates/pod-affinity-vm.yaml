@@ -24,7 +24,7 @@ spec:
     name: u1.small
   preference:
     name: rhel.10
-  runStrategy: Manual
+  runStrategy: RestartOnFailure
   template:
     metadata:
       labels:
