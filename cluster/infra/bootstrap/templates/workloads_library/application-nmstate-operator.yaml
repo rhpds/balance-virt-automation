@@ -1,0 +1,32 @@
+{{ if .Values.nmstateOperator.enabled -}}
+{{- range $dest := .Values.nmstateOperator.destinations }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nmstate-operator{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
+  namespace: openshift-gitops
+spec:
+  project: infra
+  source:
+    repoURL: {{ $.Values.nmstateOperator.git.repoURL }}
+    targetRevision: {{ $.Values.nmstateOperator.git.targetRevision }}
+    path: {{ $.Values.nmstateOperator.git.path }}
+  destination:
+    name: {{ $dest }}
+    namespace: openshift-nmstate
+  syncPolicy:
+    automated:
+      enabled: true
+    syncOptions:
+      - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
+      - RespectIgnoreDifferences=true
+    retry:
+      limit: 10
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+{{- end }}
+{{- end }}

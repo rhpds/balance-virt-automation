@@ -144,6 +144,17 @@ rhacmManagedCluster:
     path: workloads_library/infra/rhacm-managed-cluster-primary
     <<: *git_defaults
 
+# NMState Operator — manages host network configuration via NodeNetworkConfigurationPolicy.
+# Required by CCLM for OVN bridge-mapping configuration.
+nmstateOperator:
+  enabled: true
+  destinations:
+    - in-cluster
+    - *secondary
+  git:
+    path: workloads_library/infra/nmstate-operator-both
+    <<: *git_defaults
+
 # CCLM — Cross-Cluster Live Migration network (OVN bridge-mapping on br-ex).
 # Deployed to both clusters so each has the localnet mapping for migration traffic.
 cclm:
