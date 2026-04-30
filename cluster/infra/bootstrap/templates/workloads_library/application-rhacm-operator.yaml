@@ -33,5 +33,12 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
+  ignoreDifferences:
+    - group: operator.open-cluster-management.io
+      kind: MultiClusterHub
+      jsonPointers:
+        - /spec/availabilityConfig
+        - /spec/localClusterName
+        - /spec/overrides/components
 {{- end }}
 {{- end }}
