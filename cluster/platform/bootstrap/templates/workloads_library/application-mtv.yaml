@@ -28,5 +28,10 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
+  ignoreDifferences:
+    - group: forklift.konveyor.io
+      kind: ForkliftController
+      jsonPointers:
+        - /spec/controller_container_limits_memory
 {{- end }}
 {{- end }}
