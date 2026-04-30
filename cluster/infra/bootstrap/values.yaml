@@ -58,6 +58,14 @@ certManager:
     path: workloads_library/infra/cert-manager-operator-secondary
     <<: *git_defaults
 
+htpasswdAuth:
+  enabled: true
+  destinations:
+    - *secondary
+  git:
+    path: workloads_library/infra/htpasswd-auth-secondary
+    <<: *git_defaults
+
 imageRegistry:
   enabled: true
   destinations:

@@ -1,0 +1,5 @@
+apiVersion: v2
+name: htpasswd-auth
+description: Sets up htpasswd identity provider with a cluster-admin user
+version: 0.1.0
+type: application
