@@ -1,0 +1,67 @@
+{{- if .Values.labelLocalClusterJob.enabled }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: label-local-cluster
+  namespace: open-cluster-management
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: label-local-cluster
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+rules:
+  - apiGroups:
+      - cluster.open-cluster-management.io
+    resources:
+      - managedclusters
+    verbs:
+      - get
+      - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: label-local-cluster
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: label-local-cluster
+subjects:
+  - kind: ServiceAccount
+    name: label-local-cluster
+    namespace: open-cluster-management
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: label-local-cluster
+  namespace: open-cluster-management
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+    argocd.argoproj.io/hook: PostSync
+spec:
+  backoffLimit: 5
+  template:
+    spec:
+      serviceAccountName: label-local-cluster
+      restartPolicy: OnFailure
+      containers:
+        - name: label
+          image: registry.redhat.io/openshift4/ose-cli:latest
+          command:
+            - /bin/bash
+            - -c
+            - |
+              until oc get managedcluster local-cluster &>/dev/null; do
+                echo "Waiting for local-cluster ManagedCluster..."
+                sleep 10
+              done
+              oc label managedcluster local-cluster acm/cnv-operator-install=true --overwrite
+{{- end }}

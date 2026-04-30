@@ -7,3 +7,7 @@ deployer:
   apiUrl: https://api.cluster-guid.sandbox.opentlc.com:6443
 
 namespace: open-cluster-management
+
+kubevirtAdmin:
+  subjectKind: Group
+  subjectName: system:cluster-admins

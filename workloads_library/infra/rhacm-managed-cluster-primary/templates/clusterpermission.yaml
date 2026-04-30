@@ -1,0 +1,19 @@
+---
+apiVersion: rbac.open-cluster-management.io/v1alpha1
+kind: ClusterPermission
+metadata:
+  name: kubevirt-admin
+  namespace: {{ .Values.managedCluster.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  clusterRoleBinding:
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: kubevirt.io:admin
+    subject:
+      kind: {{ .Values.kubevirtAdmin.subjectKind }}
+      name: {{ .Values.kubevirtAdmin.subjectName }}
+      apiGroup: rbac.authorization.k8s.io

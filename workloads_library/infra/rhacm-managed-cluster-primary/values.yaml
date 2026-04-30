@@ -5,3 +5,10 @@ managedCluster:
   clusterSet: default
   vendor: OpenShift
   cloudProvider: Other
+
+kubevirtAdmin:
+  subjectKind: Group
+  subjectName: system:cluster-admins
+
+labelLocalClusterJob:
+  enabled: false

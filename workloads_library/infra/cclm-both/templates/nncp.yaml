@@ -1,0 +1,12 @@
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: cclm-bridge-mapping
+spec:
+  desiredState:
+    ovn:
+      bridge-mappings:
+        - bridge: {{ .Values.bridge }}
+          localnet: {{ .Values.localnet }}
+          state: present

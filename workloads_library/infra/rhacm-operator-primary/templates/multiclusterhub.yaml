@@ -7,4 +7,10 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "3"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-spec: {}
+spec:
+  overrides:
+    components:
+      - name: fine-grained-rbac
+        enabled: true
+      - name: cnv-mtv-integrations
+        enabled: true

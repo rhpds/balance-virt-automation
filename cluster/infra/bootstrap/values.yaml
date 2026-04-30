@@ -144,6 +144,17 @@ rhacmManagedCluster:
     path: workloads_library/infra/rhacm-managed-cluster-primary
     <<: *git_defaults
 
+# CCLM — Cross-Cluster Live Migration network (OVN bridge-mapping on br-ex).
+# Deployed to both clusters so each has the localnet mapping for migration traffic.
+cclm:
+  enabled: true
+  destinations:
+    - in-cluster
+    - *secondary
+  git:
+    path: workloads_library/infra/cclm-both
+    <<: *git_defaults
+
 # rhacm Operator — installs the ACM operator and MultiClusterHub.
 # Platform pair: rhacm (in platform values)
 rhacmOperator:
@@ -168,6 +179,8 @@ deschedulerOperator:
 # Platform pair: kubevirt (in platform values)
 kubevirtOperator:
   enabled: true
+  decentralizedLiveMigration: true
+  liveMigrationNetwork: openshift-cnv/dc-net
   destinations:
     - in-cluster
     - *secondary

@@ -12,6 +12,11 @@ spec:
     repoURL: {{ $.Values.kubevirtOperator.git.repoURL }}
     targetRevision: {{ $.Values.kubevirtOperator.git.targetRevision }}
     path: {{ $.Values.kubevirtOperator.git.path }}
+    helm:
+      values: |
+        kubevirt:
+          decentralizedLiveMigration: {{ $.Values.kubevirtOperator.decentralizedLiveMigration | default false }}
+          liveMigrationNetwork: {{ $.Values.kubevirtOperator.liveMigrationNetwork | default "" | quote }}
   destination:
     name: {{ $dest }}
     namespace: openshift-cnv

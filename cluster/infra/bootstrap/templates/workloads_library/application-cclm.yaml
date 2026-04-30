@@ -1,0 +1,25 @@
+{{ if .Values.cclm.enabled -}}
+{{- range $dest := .Values.cclm.destinations }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cclm{{- if ne $dest "in-cluster" }}-{{ $dest }}{{- end }}
+  namespace: openshift-gitops
+spec:
+  project: infra
+  source:
+    repoURL: {{ $.Values.cclm.git.repoURL }}
+    targetRevision: {{ $.Values.cclm.git.targetRevision }}
+    path: {{ $.Values.cclm.git.path }}
+  destination:
+    name: {{ $dest }}
+    namespace: default
+  syncPolicy:
+    automated:
+      enabled: true
+    syncOptions:
+      - SkipDryRunOnMissingResource=true
+      - RespectIgnoreDifferences=true
+{{- end }}
+{{- end }}

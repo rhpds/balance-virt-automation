@@ -15,3 +15,11 @@ spec:
         {{ .Values.ocp4_workload_openshift_virtualization_workload_tolerations }}
 {{- end }}
   enableCommonBootImageImport: false
+{{- if .Values.kubevirt.decentralizedLiveMigration }}
+  featureGates:
+    decentralizedLiveMigration: true
+{{- end }}
+{{- if .Values.kubevirt.liveMigrationNetwork }}
+  liveMigrationConfig:
+    network: {{ .Values.kubevirt.liveMigrationNetwork }}
+{{- end }}

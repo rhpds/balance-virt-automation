@@ -14,6 +14,8 @@ external_ceph: true # use a boolean, not a "string"
 guid: xyzzy
 
 kubevirt:
+  decentralizedLiveMigration: false
+  liveMigrationNetwork: ""
   startingCSV: ""
   # config:
   #   env:
