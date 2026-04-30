@@ -166,7 +166,7 @@ nmstateOperator:
 # CCLM — Cross-Cluster Live Migration network (OVN bridge-mapping on br-ex).
 # Deployed to both clusters so each has the localnet mapping for migration traffic.
 cclm:
-  enabled: true
+  enabled: false
   destinations:
     - in-cluster
     - *secondary
