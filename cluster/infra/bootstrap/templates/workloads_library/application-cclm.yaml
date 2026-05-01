@@ -16,6 +16,7 @@ spec:
       values: |
         subnet: {{ index $.Values.cclm.subnets $dest }}
         excludeSubnets: {{ index $.Values.cclm.excludeSubnets $dest }}
+        dest: {{ $dest }}
   destination:
     name: {{ $dest }}
     namespace: default

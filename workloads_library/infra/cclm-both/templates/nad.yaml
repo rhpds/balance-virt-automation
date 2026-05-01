@@ -2,7 +2,7 @@
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:
-  name: {{ .Values.localnet }}
+  name: livemigration-network-cluster-{{ .Values.dest }}
   namespace: {{ .Values.namespace }}
   annotations:
     forklift.konveyor.io/route: none
