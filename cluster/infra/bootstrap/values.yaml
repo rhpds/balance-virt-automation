@@ -170,6 +170,9 @@ cclm:
   destinations:
     - in-cluster
     - *secondary
+  subnets:
+    in-cluster: "192.168.200.0/24"
+    cluster2: "192.168.201.0/24"
   git:
     path: workloads_library/infra/cclm-both
     <<: *git_defaults

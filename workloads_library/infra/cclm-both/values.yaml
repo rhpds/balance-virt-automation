@@ -1,3 +1,4 @@
 localnet: dc-net
 bridge: br-ex
 namespace: openshift-cnv
+subnet: 192.168.200.0/24

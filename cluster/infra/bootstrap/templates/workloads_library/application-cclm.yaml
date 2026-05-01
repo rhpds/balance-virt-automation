@@ -12,6 +12,9 @@ spec:
     repoURL: {{ $.Values.cclm.git.repoURL }}
     targetRevision: {{ $.Values.cclm.git.targetRevision }}
     path: {{ $.Values.cclm.git.path }}
+    helm:
+      values: |
+        subnet: {{ index $.Values.cclm.subnets $dest }}
   destination:
     name: {{ $dest }}
     namespace: default
