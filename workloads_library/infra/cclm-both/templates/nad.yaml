@@ -10,10 +10,12 @@ spec:
   config: |
     {
       "cniVersion": "0.4.0",
-      "name": "{{ .Values.localnet }}",
+      "name": "livemigration-network",
       "type": "ovn-k8s-cni-overlay",
+      "physicalNetworkName": "{{ .Values.localnet }}",
+      "mtu": 8782,
+      "netAttachDefName": "{{ .Values.namespace }}/livemigration-network",
       "topology": "localnet",
-      "netAttachDefName": "{{ .Values.namespace }}/{{ .Values.localnet }}",
       "subnets": "{{ .Values.subnet }}",
       "excludeSubnets": "{{ .Values.excludeSubnets }}"
     }
