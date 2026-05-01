@@ -7,13 +7,7 @@ metadata:
   name: kubevirt-hyperconverged
   namespace: openshift-cnv
 spec:
-  defaultCPUModel: Icelake-Server-v2
-{{- if .Values.ocp4_workload_openshift_virtualization_workload_tolerations }}
-  workloads:
-    nodePlacement:
-      tolerations:
-        {{ .Values.ocp4_workload_openshift_virtualization_workload_tolerations }}
-{{- end }}
+  #  defaultCPUModel: Icelake-Server-v2
   enableCommonBootImageImport: true
 {{- if .Values.kubevirt.decentralizedLiveMigration }}
   featureGates:
