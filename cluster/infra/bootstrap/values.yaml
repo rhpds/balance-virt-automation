@@ -98,7 +98,7 @@ platform:
 # Enabled by default. Disable only if you are managing StorageClass separately.
 # ---------------------------------------------------------------------------
 defaultStorageclassCluster:
-  enabled: false
+  enabled: true
   storageClassName: ocs-storagecluster-cephfs
   destinations:
     - *secondary
