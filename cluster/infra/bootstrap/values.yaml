@@ -97,7 +97,7 @@ platform:
 # defaultStorageclass — sets the default StorageClass on the cluster.
 # Enabled by default. Disable only if you are managing StorageClass separately.
 # ---------------------------------------------------------------------------
-defaultStorageclassCluster:
+defaultStorageclassSecondary:
   enabled: true
   storageClassName: ocs-storagecluster-cephfs
   destinations:
@@ -106,11 +106,7 @@ defaultStorageclassCluster:
     path: workloads_library/infra/default-storageclass-primary
     <<: *git_defaults
 
-# ---------------------------------------------------------------------------
-# defaultStorageclass — sets the default StorageClass on the cluster.
-# Enabled by default. Disable only if you are managing StorageClass separately.
-# ---------------------------------------------------------------------------
-defaultStorageclass:
+defaultStorageclassPrimary:
   enabled: true
   storageClassName: ocs-storagecluster-cephfs
   destinations:

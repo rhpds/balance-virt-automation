@@ -1,5 +1,5 @@
-{{ if .Values.defaultStorageclass.enabled -}}
-{{- range $dest := .Values.defaultStorageclass.destinations }}
+{{ if .Values.defaultStorageclassPrimary.enabled -}}
+{{- range $dest := .Values.defaultStorageclassPrimary.destinations }}
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -9,9 +9,9 @@ metadata:
 spec:
   project: infra
   source:
-    repoURL: {{ $.Values.defaultStorageclass.git.repoURL }}
-    targetRevision: {{ $.Values.defaultStorageclass.git.targetRevision }}
-    path: {{ $.Values.defaultStorageclass.git.path }}
+    repoURL: {{ $.Values.defaultStorageclassPrimary.git.repoURL }}
+    targetRevision: {{ $.Values.defaultStorageclassPrimary.git.targetRevision }}
+    path: {{ $.Values.defaultStorageclassPrimary.git.path }}
   destination:
     name: {{ $dest }}
   syncPolicy:
