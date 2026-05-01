@@ -198,7 +198,7 @@ deschedulerOperator:
 kubevirtOperator:
   enabled: true
   decentralizedLiveMigration: true
-  liveMigrationNetwork: openshift-cnv/dc-net
+  #liveMigrationNetwork: openshift-cnv/dc-net
   destinations:
     - in-cluster
     - *secondary
