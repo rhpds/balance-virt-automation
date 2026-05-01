@@ -16,6 +16,7 @@ spec:
       "mtu": 8782,
       "netAttachDefName": "{{ .Values.namespace }}/livemigration-network",
       "topology": "localnet",
+      "vlanID": 10,
       "subnets": "{{ .Values.subnet }}",
       "excludeSubnets": "{{ .Values.excludeSubnets }}"
     }
