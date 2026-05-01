@@ -196,7 +196,7 @@ deschedulerOperator:
 # KubeVirt (OpenShift Virtualization) Operator — runs VMs on OpenShift.
 # Platform pair: kubevirt (in platform values)
 kubevirtOperator:
-  enabled: true
+  enabled: false
   decentralizedLiveMigration: true
   #liveMigrationNetwork: openshift-cnv/dc-net
   destinations:
