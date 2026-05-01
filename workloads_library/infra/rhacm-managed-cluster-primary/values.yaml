@@ -10,9 +10,10 @@ managedCluster:
 #   subjectKind: Group
 #   subjectName: system:cluster-admins
 kubevirtAdmin:
-    subjectKind: ServiceAccount
-    subjectNamespace: openshift-config
-    subjectName: system:serviceaccount:openshift-config:cluster-admin
+    subjectKind: Group
+    #subjectNamespace: openshift-config
+    #subjectName: system:serviceaccount:openshift-config:cluster-admin
+    subjectName: system:serviceaccount:openshift-config
 
 labelLocalClusterJob:
   enabled: false
