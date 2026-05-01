@@ -10,3 +10,5 @@ spec:
         - bridge: {{ .Values.bridge }}
           localnet: {{ .Values.localnet }}
           state: present
+  # nodeSelector:
+  #   kubernetes.io/hostname=control-plane-cluster-qjrgf-1
