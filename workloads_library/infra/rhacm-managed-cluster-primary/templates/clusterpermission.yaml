@@ -15,5 +15,8 @@ spec:
       name: kubevirt.io:admin
     subject:
       kind: {{ .Values.kubevirtAdmin.subjectKind }}
+      {{- if .Values.kubevirtAdmin.subjectNamespace }}
+      namespace: {{ .Values.kubevirtAdmin.subjectNamespace }}
+      {{- end }}
       name: {{ .Values.kubevirtAdmin.subjectName }}
       apiGroup: rbac.authorization.k8s.io

@@ -6,9 +6,13 @@ managedCluster:
   vendor: OpenShift
   cloudProvider: Other
 
+# kubevirtAdmin:
+#   subjectKind: Group
+#   subjectName: system:cluster-admins
 kubevirtAdmin:
-  subjectKind: Group
-  subjectName: system:cluster-admins
+    subjectKind: ServiceAccount
+    subjectNamespace: openshift-config
+    subjectName: system:serviceaccount:openshift-config:cluster-admin
 
 labelLocalClusterJob:
   enabled: false
